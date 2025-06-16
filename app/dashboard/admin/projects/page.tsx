@@ -29,7 +29,7 @@ type Project = {
   created_at: string;
   presentation_date: string | null;
   student_id: string;
-  programmingLanguages?: string[]; // Added property
+  programmingLanguages?: string[];
   profiles: {
     full_name: string;
     email: string;

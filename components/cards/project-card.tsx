@@ -48,13 +48,13 @@ export function ProjectCard({
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "approved":
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
+        return <CheckCircle className="h-4 w-4 mr-2 text-green-500" />;
       case "rejected":
-        return <XCircle className="h-4 w-4 text-red-500" />;
+        return <XCircle className="h-4 w-4 mr-2 text-red-500" />;
       case "submitted":
-        return <AlertCircle className="h-4 w-4 text-yellow-500" />;
+        return <AlertCircle className="h-4 w-4 mr-2 text-yellow-500" />;
       default:
-        return <Clock className="h-4 w-4 text-gray-500" />;
+        return <Clock className="h-4 w-4 mr-2 text-gray-500" />;
     }
   };
 
@@ -113,7 +113,10 @@ export function ProjectCard({
         </div>
         <div className="flex items-center space-x-1 pt-4">
           {(programmingLanguages ?? []).map((lang) => (
-            <Badge key={lang} className=" bg-purple-100 hover:bg-purple-200 text-purple-800 text-xs">
+            <Badge
+              key={lang}
+              className=" bg-purple-100 hover:bg-purple-200 text-purple-800 text-xs"
+            >
               {lang}
             </Badge>
           ))}

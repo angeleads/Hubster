@@ -396,6 +396,7 @@ export default function ProjectDetailPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
+        
         <div>
           <Link href="/dashboard" className="text-sm text-slate-400 hover:text-black flex items-center mb-2">
             <ArrowLeft className="h-4 w-4 mr-1" />

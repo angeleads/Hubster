@@ -17,6 +17,7 @@ type Project = {
   total_estimated_days: number;
   created_at: string;
   presentation_date: string | null;
+  programming_language?: string[];
 };
 
 export default function MyProjectsPage() {
@@ -85,6 +86,7 @@ export default function MyProjectsPage() {
                   id={project.id}
                   name={project.name}
                   summary={project.summary}
+                  programmingLanguages={project.programming_language ?? []}
                   status={project.status}
                   totalEstimatedDays={project.total_estimated_days}
                   createdAt={project.created_at}
@@ -120,6 +122,7 @@ export default function MyProjectsPage() {
                     id={project.id}
                     name={project.name}
                     summary={project.summary}
+                    programmingLanguages={project.programming_language ?? []}
                     status={project.status}
                     totalEstimatedDays={project.total_estimated_days}
                     createdAt={project.created_at}
@@ -149,6 +152,7 @@ export default function MyProjectsPage() {
                     id={project.id}
                     name={project.name}
                     summary={project.summary}
+                    programmingLanguages={project.programming_language ?? []}
                     status={project.status}
                     totalEstimatedDays={project.total_estimated_days}
                     createdAt={project.created_at}
@@ -176,6 +180,7 @@ export default function MyProjectsPage() {
                     key={project.id}
                     id={project.id}
                     name={project.name}
+                    programmingLanguages={project.programming_language ?? []}
                     summary={project.summary}
                     status={project.status}
                     totalEstimatedDays={project.total_estimated_days}
