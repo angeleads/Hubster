@@ -3,21 +3,16 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/auth-context";
 import { supabase } from "@/lib/supabase";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ProjectCard } from "@/components/cards/project-card";
 import { EventCard } from "@/components/cards/event-card";
-import { LoadingSpinner } from "@/components/utils/loading-spinner";
-import { ErrorMessage } from "@/components/utils/error-message";
-import { EmptyState } from "@/components/cards/empty-state";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { ErrorMessage } from "@/components/ui/error-message";
+import { EmptyState } from "@/components/ui/empty-state";
+import { PageHeader } from "@/components/ui/page-header";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
-import { Calendar, FolderPlus, FileText } from "lucide-react";
+import { Calendar, FolderPlus, FileText, TrendingUp, Users, Clock } from "lucide-react";
 
 type Project = {
   id: string;
@@ -47,11 +42,24 @@ type Event = {
   presenter_name: string;
 };
 
+type DashboardStats = {
+  totalProjects: number;
+  approvedProjects: number;
+  pendingProjects: number;
+  upcomingEvents: number;
+};
+
 export default function DashboardPage() {
   const { profile } = useAuth();
   const [projects, setProjects] = useState<Project[]>([]);
   const [talks, setTalks] = useState<Event[]>([]);
   const [workshops, setWorkshops] = useState<Event[]>([]);
+  const [stats, setStats] = useState<DashboardStats>({
+    totalProjects: 0,
+    approvedProjects: 0,
+    pendingProjects: 0,
+    upcomingEvents: 0,
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -68,16 +76,13 @@ export default function DashboardPage() {
     setError(null);
 
     try {
-      // Fetch projects with proper error handling
+      // Fetch projects
       const { data: projectsData, error: projectsError } = await supabase
         .from("projects")
-        .select(
-          `
-          *
-        `
-        )
+        .select(`*`)
         .eq("status", "approved")
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .limit(6);
 
       if (projectsError) {
         console.error("Projects error:", projectsError);
@@ -85,14 +90,15 @@ export default function DashboardPage() {
         setProjects(projectsData || []);
       }
 
-      // Fetch talks and conferences (including user_groups should go to workshops)
+      // Fetch talks and conferences
       const { data: talksData, error: talksError } = await supabase
         .from("events")
         .select("*")
-        .in("event_type", ["talk", "conference"]) // Removed user_group from here
+        .in("event_type", ["talk", "conference"])
         .eq("status", "approved")
         .gte("start_date", new Date().toISOString())
-        .order("start_date", { ascending: true });
+        .order("start_date", { ascending: true })
+        .limit(3);
 
       if (talksError) {
         console.error("Talks error:", talksError);
@@ -107,13 +113,35 @@ export default function DashboardPage() {
         .in("event_type", ["workshop", "user_group"])
         .eq("status", "approved")
         .gte("start_date", new Date().toISOString())
-        .order("start_date", { ascending: true });
+        .order("start_date", { ascending: true })
+        .limit(3);
 
       if (workshopsError) {
         console.error("Workshops error:", workshopsError);
       } else {
         setWorkshops(workshopsData || []);
       }
+
+      // Fetch dashboard stats
+      const [projectsCount, eventsCount] = await Promise.all([
+        supabase.from("projects").select("status", { count: "exact" }),
+        supabase.from("events").select("*", { count: "exact" })
+          .eq("status", "approved")
+          .gte("start_date", new Date().toISOString()),
+      ]);
+
+      if (projectsCount.data) {
+        const approved = projectsCount.data.filter(p => p.status === "approved").length;
+        const pending = projectsCount.data.filter(p => p.status === "submitted").length;
+        
+        setStats({
+          totalProjects: projectsCount.count || 0,
+          approvedProjects: approved,
+          pendingProjects: pending,
+          upcomingEvents: eventsCount.count || 0,
+        });
+      }
+
     } catch (error) {
       console.error("Error fetching data:", error);
       setError("Failed to load dashboard data. Please try again.");
@@ -123,7 +151,7 @@ export default function DashboardPage() {
   };
 
   if (loading) {
-    return <LoadingSpinner message="Loading dashboard..." />;
+    return <LoadingSpinner message="Loading your dashboard..." />;
   }
 
   if (error) {
@@ -134,73 +162,123 @@ export default function DashboardPage() {
     return <LoadingSpinner message="Loading profile..." />;
   }
 
+  const isAdmin = profile.role === "admin";
+
   return (
     <div className="space-y-8">
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900">Welcome back, {profile?.full_name}</h2>
-          <p className="text-gray-600">Take a look at the ongoing activities!</p>
-        </div>
-        {profile?.role === "student" && (
-          <div className="flex gap-2">
+      <PageHeader
+        title={`Welcome back, ${profile.full_name}`}
+        description="Here's what's happening with your projects and events"
+      >
+        {profile.role === "student" && (
+          <div className="flex gap-3">
             <Link href="/dashboard/new-project">
-              <Button className="bg-purple-200 hover:bg-purple-300 text-purple-800 rounded-xl">
+              <Button className="bg-purple-600 hover:bg-purple-700">
                 <FolderPlus className="h-4 w-4 mr-2" />
                 New Project
               </Button>
             </Link>
             <Link href="/dashboard/presentations/new">
-              <Button
-                variant="outline"
-                className="text-gray-800 hover:bg-purple-400 hover:text-purple-100 rounded-xl"
-              >
-                <Calendar className="h-4 w-4 mr-2 " />
+              <Button variant="outline">
+                <Calendar className="h-4 w-4 mr-2" />
                 Schedule Presentation
               </Button>
             </Link>
           </div>
         )}
+      </PageHeader>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <FileText className="h-6 w-6 text-blue-600" />
+              </div>
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600">Total Projects</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.totalProjects}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center">
+              <div className="p-2 bg-green-100 rounded-lg">
+                <TrendingUp className="h-6 w-6 text-green-600" />
+              </div>
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600">Approved</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.approvedProjects}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center">
+              <div className="p-2 bg-amber-100 rounded-lg">
+                <Clock className="h-6 w-6 text-amber-600" />
+              </div>
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600">Pending Review</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.pendingProjects}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center">
+              <div className="p-2 bg-purple-100 rounded-lg">
+                <Calendar className="h-6 w-6 text-purple-600" />
+              </div>
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600">Upcoming Events</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.upcomingEvents}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
-      {/* Section 1: Free Projects (All Students' Projects) */}
+      {/* Recent Projects */}
       <Card>
-        <CardHeader>
-          <CardTitle>Ongoing Free Projects</CardTitle>
-          <CardDescription>
-            Browse all available student projects and get inspired by their work!
-          </CardDescription>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle>Recent Approved Projects</CardTitle>
+          <Link href={isAdmin ? "/dashboard/admin/projects" : "/dashboard/my-projects"}>
+            <Button variant="outline" size="sm">
+              View All
+            </Button>
+          </Link>
         </CardHeader>
         <CardContent>
           {projects.length > 0 ? (
-            <>
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {projects.slice(0, 6).map((project) => (
-                  <ProjectCard
-                    key={project.id}
-                    id={project.id}
-                    name={project.name}
-                    summary={project.summary}
-                    programmingLanguages={project.programming_languages || []}
-                    status={project.status}
-                    totalEstimatedDays={project.total_estimated_days}
-                    createdAt={project.created_at}
-                    presentationDate={project.presentation_date}
-                    studentName={project.profiles?.full_name}
-                    isAdmin={profile?.role === "admin"}
-                  />
-                ))}
-              </div>
-              {projects.length > 6 && (
-                <div className="mt-6 text-center">
-                  <Link href="/dashboard/projects">
-                    <Button variant="outline">View All Projects</Button>
-                  </Link>
-                </div>
-              )}
-            </>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {projects.map((project) => (
+                <ProjectCard
+                  key={project.id}
+                  id={project.id}
+                  name={project.name}
+                  summary={project.summary}
+                  programmingLanguages={project.programming_languages || []}
+                  status={project.status}
+                  totalEstimatedDays={project.total_estimated_days}
+                  createdAt={project.created_at}
+                  presentationDate={project.presentation_date}
+                  studentName={project.profiles?.full_name}
+                  isAdmin={isAdmin}
+                />
+              ))}
+            </div>
           ) : (
             <EmptyState
-              icon={<FileText className="h-12 w-12 text-gray-400 mx-auto" />}
+              icon={<FileText className="h-12 w-12 text-gray-400" />}
               title="No approved projects yet"
               description="Check back later for new projects from students"
             />
@@ -208,42 +286,34 @@ export default function DashboardPage() {
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Section 2: Upcoming Talks and Conferences */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Upcoming Talks */}
         <Card>
-          <CardHeader>
+          <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Upcoming Talks & Conferences</CardTitle>
-            <CardDescription>
-              Stay updated with the latest talks and conferences
-            </CardDescription>
+            <Link href="/dashboard/events">
+              <Button variant="outline" size="sm">
+                View All
+              </Button>
+            </Link>
           </CardHeader>
           <CardContent>
             {talks.length > 0 ? (
               <div className="space-y-4">
-                {talks.slice(0, 3).map((event) => (
+                {talks.map((event) => (
                   <EventCard key={event.id} event={event} />
                 ))}
-                {talks.length > 3 && (
-                  <div className="mt-4 text-center">
-                    <Link href="/dashboard/events">
-                      <Button variant="outline" size="sm">
-                        View all talks
-                      </Button>
-                    </Link>
-                  </div>
-                )}
               </div>
             ) : (
               <EmptyState
-                title="No upcoming talks or conferences"
+                title="No upcoming talks"
                 description="Check back later for new events"
                 action={
-                  profile?.role === "student"
+                  profile.role === "student"
                     ? {
                         label: "Schedule a Talk",
-                        onClick: () =>
-                          (window.location.href =
-                            "/dashboard/presentations/new"),
+                        onClick: () => (window.location.href = "/dashboard/presentations/new"),
+                        variant: "outline"
                       }
                     : undefined
                 }
@@ -252,40 +322,33 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        {/* Section 3: Upcoming Workshops and User Groups */}
+        {/* Upcoming Workshops */}
         <Card>
-          <CardHeader>
-            <CardTitle>Upcoming Workshops & User Groups</CardTitle>
-            <CardDescription>
-              Enhance your skills with these workshops and user groups
-            </CardDescription>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>Upcoming Workshops</CardTitle>
+            <Link href="/dashboard/events">
+              <Button variant="outline" size="sm">
+                View All
+              </Button>
+            </Link>
           </CardHeader>
           <CardContent>
             {workshops.length > 0 ? (
               <div className="space-y-4">
-                {workshops.slice(0, 3).map((event) => (
+                {workshops.map((event) => (
                   <EventCard key={event.id} event={event} />
                 ))}
-                {workshops.length > 3 && (
-                  <div className="mt-4 text-center">
-                    <Link href="/dashboard/events">
-                      <Button variant="outline" size="sm">
-                        View all workshops
-                      </Button>
-                    </Link>
-                  </div>
-                )}
               </div>
             ) : (
               <EmptyState
-                title="No upcoming workshops or user groups"
+                title="No upcoming workshops"
                 description="Check back later for new events"
                 action={
-                  profile?.role === "admin"
+                  profile.role === "admin"
                     ? {
                         label: "Create Workshop",
-                        onClick: () =>
-                          (window.location.href = "/dashboard/events/new"),
+                        onClick: () => (window.location.href = "/dashboard/events/new"),
+                        variant: "outline"
                       }
                     : undefined
                 }
