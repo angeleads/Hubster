@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/auth-context";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
-import { ProjectCard } from "@/components/cards/project-card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ProjectCardsList } from "@/components/cards/project-cards-list";
 import Link from "next/link";
 import { FolderPlus } from "lucide-react";
 
@@ -16,7 +16,7 @@ type Project = {
   status: string;
   total_estimated_days: number;
   created_at: string;
-  presentation_date: string | null;
+  presentation_date: string;
   programming_language?: string[];
 };
 
@@ -50,10 +50,6 @@ export default function MyProjectsPage() {
     }
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -70,132 +66,51 @@ export default function MyProjectsPage() {
       </div>
 
       <Tabs defaultValue="all" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="all">All Projects</TabsTrigger>
           <TabsTrigger value="draft">Drafts</TabsTrigger>
           <TabsTrigger value="submitted">Submitted</TabsTrigger>
           <TabsTrigger value="approved">Approved</TabsTrigger>
+          <TabsTrigger value="completed">Completed</TabsTrigger>
         </TabsList>
 
         <TabsContent value="all" className="mt-6">
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {projects.length > 0 ? (
-              projects.map((project) => (
-                <ProjectCard
-                  key={project.id}
-                  id={project.id}
-                  name={project.name}
-                  summary={project.summary}
-                  programmingLanguages={project.programming_language ?? []}
-                  status={project.status}
-                  totalEstimatedDays={project.total_estimated_days}
-                  createdAt={project.created_at}
-                  presentationDate={project.presentation_date}
-                  isDraft={project.status === "draft"}
-                />
-              ))
-            ) : (
-              <div className="col-span-full text-center py-8">
-                <p className="text-gray-500 mb-4">
-                  You haven't created any projects yet
-                </p>
-                <Link href="/dashboard/new-project">
-                  <Button>
-                    <FolderPlus className="h-4 w-4 mr-2" />
-                    Create Your First Project
-                  </Button>
-                </Link>
-              </div>
-            )}
-          </div>
+          <ProjectCardsList
+            projects={projects}
+            emptyMessage="You haven't created any projects yet"
+          />
         </TabsContent>
 
         <TabsContent value="draft" className="mt-6">
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {projects.filter((project) => project.status === "draft").length >
-            0 ? (
-              projects
-                .filter((project) => project.status === "draft")
-                .map((project) => (
-                  <ProjectCard
-                    key={project.id}
-                    id={project.id}
-                    name={project.name}
-                    summary={project.summary}
-                    programmingLanguages={project.programming_language ?? []}
-                    status={project.status}
-                    totalEstimatedDays={project.total_estimated_days}
-                    createdAt={project.created_at}
-                    presentationDate={project.presentation_date}
-                    isDraft={true}
-                  />
-                ))
-            ) : (
-              <div className="col-span-full text-center py-8">
-                <p className="text-gray-500">
-                  You don't have any draft projects
-                </p>
-              </div>
-            )}
-          </div>
+          <ProjectCardsList
+            projects={projects}
+            status="draft"
+            emptyMessage="You don't have any draft projects"
+          />
         </TabsContent>
 
         <TabsContent value="submitted" className="mt-6">
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {projects.filter((project) => project.status === "submitted")
-              .length > 0 ? (
-              projects
-                .filter((project) => project.status === "submitted")
-                .map((project) => (
-                  <ProjectCard
-                    key={project.id}
-                    id={project.id}
-                    name={project.name}
-                    summary={project.summary}
-                    programmingLanguages={project.programming_language ?? []}
-                    status={project.status}
-                    totalEstimatedDays={project.total_estimated_days}
-                    createdAt={project.created_at}
-                    presentationDate={project.presentation_date}
-                  />
-                ))
-            ) : (
-              <div className="col-span-full text-center py-8">
-                <p className="text-gray-500">
-                  You don't have any submitted projects
-                </p>
-              </div>
-            )}
-          </div>
+          <ProjectCardsList
+            projects={projects}
+            status="submitted"
+            emptyMessage="You don't have any submitted projects"
+          />
         </TabsContent>
 
         <TabsContent value="approved" className="mt-6">
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {projects.filter((project) => project.status === "approved")
-              .length > 0 ? (
-              projects
-                .filter((project) => project.status === "approved")
-                .map((project) => (
-                  <ProjectCard
-                    key={project.id}
-                    id={project.id}
-                    name={project.name}
-                    programmingLanguages={project.programming_language ?? []}
-                    summary={project.summary}
-                    status={project.status}
-                    totalEstimatedDays={project.total_estimated_days}
-                    createdAt={project.created_at}
-                    presentationDate={project.presentation_date}
-                  />
-                ))
-            ) : (
-              <div className="col-span-full text-center py-8">
-                <p className="text-gray-500">
-                  You don't have any approved projects
-                </p>
-              </div>
-            )}
-          </div>
+          <ProjectCardsList
+            projects={projects}
+            status="approved"
+            emptyMessage="You don't have any approved projects"
+          />
+        </TabsContent>
+
+        <TabsContent value="completed" className="mt-6">
+          <ProjectCardsList
+            projects={projects}
+            status="completed"
+            emptyMessage="You don't have any completed projects"
+          />
         </TabsContent>
       </Tabs>
     </div>

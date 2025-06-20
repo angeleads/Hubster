@@ -121,7 +121,7 @@ export function PresentationCardAdmin({
             href={
               isAdmin
                 ? `/dashboard/admin/presentations/${event.id}`
-                : `/dashboard/events/${event.id}`
+                : `/dashboard/presentations/${event.id}`
             }
           >
             <Button variant="outline" size="sm">

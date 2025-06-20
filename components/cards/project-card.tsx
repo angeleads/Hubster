@@ -132,7 +132,7 @@ export function ProjectCard({
                 size="sm"
                 className="text-gray-800 rounded-xl"
               >
-                <Eye className="h-4 w-4 mr-2" />
+                <Eye className="h-4 w-4" />
                 View
               </Button>
             </Link>
@@ -142,7 +142,7 @@ export function ProjectCard({
                 size="sm"
                 className="text-gray-800 rounded-xl"
               >
-                <Edit className="h-4 w-4 mr-2" />
+                <Edit className="h-4 w-4" />
                 Edit
               </Button>
             </Link>

@@ -95,7 +95,7 @@ export function EventCard({ event }: EventProps) {
           </div>
         </div>
         <div className="border-t p-3 bg-gray-50 flex justify-end">
-          <Link href={`/dashboard/events/${event.id}`}>
+          <Link href={`/dashboard/presentations/${event.id}`}>
             <Button variant="outline" size="sm">
               View Details
             </Button>

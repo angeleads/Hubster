@@ -52,10 +52,6 @@ export default function PresentationsPage() {
     }
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -72,10 +68,10 @@ export default function PresentationsPage() {
       </div>
 
       <Tabs defaultValue="upcoming">
-        <TabsList>
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-          <TabsTrigger value="past">Past</TabsTrigger>
           <TabsTrigger value="pending">Pending Approval</TabsTrigger>
+          <TabsTrigger value="past">Past and completed</TabsTrigger>
         </TabsList>
 
         <TabsContent value="upcoming" className="mt-6">
@@ -100,7 +96,7 @@ export default function PresentationsPage() {
                   You don't have any upcoming presentations
                 </p>
                 <Link href="/dashboard/presentations/new">
-                  <Button>
+                  <Button className="bg-purple-200 hover:bg-purple-300 text-purple-800">
                     <Calendar className="h-4 w-4 mr-2" />
                     Schedule a Presentation
                   </Button>
