@@ -36,14 +36,14 @@ export function PresentationHeader({
     <div>
       <Link
         href="/dashboard/presentations"
-        className="text-sm text-slate-400 hover:text-white flex items-center mb-2"
+        className="text-sm text-slate-700 hover:text-purple-500 hover:underline flex items-center mb-2"
       >
         <ArrowLeft className="h-4 w-4 mr-1" />
         Back to Presentations
       </Link>
       <div className="flex justify-between items-start">
         <div>
-          <h2 className="text-2xl font-bold text-white">{title}</h2>
+          <h2 className="text-2xl font-bold text-black">{title}</h2>
           <div className="flex items-center gap-2 mt-1">
             <Badge className={`${getEventTypeColor(eventType)} border text-xs`}>
               {getEventTypeLabel(eventType)}

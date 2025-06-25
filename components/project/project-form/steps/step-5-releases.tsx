@@ -217,7 +217,6 @@ export function Step5Releases() {
               onChange={(e) => updateFormData({ description: e.target.value })}
               placeholder="Provide a brief description of your project"
               rows={3}
-              required
             />
           </div>
 

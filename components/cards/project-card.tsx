@@ -120,9 +120,7 @@ export function ProjectCard({
               {lang}
             </Badge>
           ))}
-          {isDraft && (
-            <Badge className="bg-gray-100 text-gray-800">Draft</Badge>
-          )}
+         
         </div>
         <div className="mt-4 flex justify-between">
           <div className="space-x-2">

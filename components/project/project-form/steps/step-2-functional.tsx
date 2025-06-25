@@ -90,7 +90,7 @@ export function Step2Functional() {
         <Button type="button" variant="outline" onClick={goToPreviousStep}>
           Previous Step
         </Button>
-        <Button type="submit">Next Step</Button>
+        <Button type="submit"  className="bg-purple-300 text-purple-600 hover:bg-purple-400 hover:text-purple-800">Next Step</Button>
       </div>
     </form>
   );

@@ -456,8 +456,8 @@ export default function ProjectDetailPage() {
         </div>
       </div>
 
-      <Tabs defaultValue="overview">
-        <TabsList className="bg-purple-200 border-purple-100 rounded-2xl p-1">
+      <Tabs defaultValue="overview" className="w-full">
+        <TabsList className="bg-purple-50 border-purple-100 rounded-2xl p-1">
           <TabsTrigger
             value="overview"
             className="data-[state=active]:bg-purple-100 rounded-2xl"
@@ -485,7 +485,7 @@ export default function ProjectDetailPage() {
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6 mt-6">
-          <Card className="bg-purple-100 border-purple-100">
+          <Card className="bg-gray-50 border-purple-100 border-4">
             <CardHeader>
               <CardTitle className="text-black">Project Summary</CardTitle>
             </CardHeader>
@@ -495,7 +495,7 @@ export default function ProjectDetailPage() {
           </Card>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="bg-purple-100 border-purple-100">
+            <Card className="bg-gray-50 border-purple-100 border-4">
               <CardHeader>
                 <CardTitle className="text-black">Project Leader</CardTitle>
               </CardHeader>
@@ -515,7 +515,7 @@ export default function ProjectDetailPage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-purple-100 border-purple-100">
+            <Card className="bg-gray-50 border-purple-100 border-4">
               <CardHeader>
                 <CardTitle className="text-black">Project Timeline</CardTitle>
               </CardHeader>
@@ -539,7 +539,7 @@ export default function ProjectDetailPage() {
             </Card>
           </div>
 
-          <Card className="bg-purple-100 border-purple-100">
+          <Card className="bg-gray-50 border-purple-100 border-4">
             <CardHeader>
               <CardTitle className="text-black">Functional Purpose</CardTitle>
             </CardHeader>
@@ -612,7 +612,7 @@ export default function ProjectDetailPage() {
         </TabsContent>
 
         <TabsContent value="details" className="space-y-6 mt-6">
-          <Card className="bg-purple-100 border-purple-100">
+          <Card className="bg-gray-50 border-purple-100 border-4">
             <CardHeader>
               <CardTitle className="text-black">
                 Technical Requirements
@@ -636,7 +636,7 @@ export default function ProjectDetailPage() {
                   {project.programming_languages.map((lang, index) => (
                     <span
                       key={index}
-                      className="bg-blue-500/20 text-blue-300 px-2 py-1 rounded-md text-sm"
+                      className="bg-purple-500/20 text-purple-600 px-2 py-1 rounded-lg text-sm"
                     >
                       {lang}
                     </span>
@@ -671,7 +671,7 @@ export default function ProjectDetailPage() {
         </TabsContent>
 
         <TabsContent value="deliverables" className="space-y-6 mt-6">
-          <Card className="bg-purple-100 border-purple-100">
+          <Card className="bg-gray-50 border-purple-100 border-4">
             <CardHeader>
               <CardTitle className="text-black">
                 Deliverable Organization
@@ -690,7 +690,7 @@ export default function ProjectDetailPage() {
                           <h3 className="font-medium text-black">
                             {deliverable.functionality}
                           </h3>
-                          <span className="text-sm bg-blue-500/20 text-blue-300 px-2 py-1 rounded-full">
+                          <span className="text-sm bg-purple-500/20 text-purple-600 px-2 py-1 rounded-full">
                             {deliverable.days} days
                           </span>
                         </div>
@@ -699,13 +699,14 @@ export default function ProjectDetailPage() {
                     )
                   )}
 
-                <div className="mt-4 p-4 bg-slate-800 rounded-md">
+                <div className="mt-4 p-4 bg-purple-200 rounded-xl">
                   <div className="flex justify-between items-center">
                     <span className="font-medium text-black">
                       Total Estimated Time:
                     </span>
                     <span className="font-bold text-black">
-                      {project.total_estimated_days} days
+                      {project.total_estimated_days} days for 
+                      <span> {project.total_xp} credits</span>
                     </span>
                   </div>
                 </div>
@@ -715,7 +716,7 @@ export default function ProjectDetailPage() {
         </TabsContent>
 
         <TabsContent value="releases" className="space-y-6 mt-6">
-          <Card className="bg-purple-100 border-purple-100">
+          <Card className="bg-gray-50 border-purple-100 border-4">
             <CardHeader>
               <CardTitle className="text-black">Project Releases</CardTitle>
               <CardDescription className="text-slate-400">
@@ -766,7 +767,7 @@ export default function ProjectDetailPage() {
           {(project.description ||
             project.video_url ||
             project.project_folder_url) && (
-            <Card className="bg-purple-100 border-purple-100">
+            <Card className="bg-gray-50 border-purple-100 border-4">
               <CardHeader>
                 <CardTitle className="text-black">
                   Delivery Information

@@ -38,15 +38,15 @@ export function PresentationEditForm({
   isSaving,
 }: Props) {
   return (
-    <Card className="bg-slate-900 border-slate-800">
+    <Card className="bg-white border-purple-800">
       <CardHeader>
-        <CardTitle className="text-white">Edit Presentation</CardTitle>
+        <CardTitle className="text-gray-900">Edit Presentation</CardTitle>
         <CardDescription className="text-slate-400">Update your presentation details</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="eventType" className="text-white">
+            <Label htmlFor="eventType" className="text-black">
               Presentation Type
             </Label>
             <Select
@@ -54,7 +54,7 @@ export function PresentationEditForm({
               onValueChange={(value) => onSelectChange("eventType", value)}
               required
             >
-              <SelectTrigger className="bg-slate-800 border-slate-700 text-white">
+              <SelectTrigger className="bg-white border-slate-700 text-black">
                 <SelectValue placeholder="Select type" />
               </SelectTrigger>
               <SelectContent>
@@ -65,7 +65,7 @@ export function PresentationEditForm({
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="title" className="text-white">
+            <Label htmlFor="title" className="text-black">
               Title
             </Label>
             <Input
@@ -74,12 +74,12 @@ export function PresentationEditForm({
               value={formData.title}
               onChange={onChange}
               placeholder="Enter presentation title"
-              className="bg-slate-800 border-slate-700 text-white"
+              className="bg-white border-slate-700 text-black"
               required
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="description" className="text-white">
+            <Label htmlFor="description" className="text-black">
               Description
             </Label>
             <Textarea
@@ -89,13 +89,13 @@ export function PresentationEditForm({
               onChange={onChange}
               placeholder="Describe your presentation"
               rows={4}
-              className="bg-slate-800 border-slate-700 text-white"
+              className="bg-white border-slate-700 text-black"
               required
             />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="preferredDate" className="text-white">
+              <Label htmlFor="preferredDate" className="text-black">
                 Preferred Date
               </Label>
               <div className="flex items-center">
@@ -107,13 +107,13 @@ export function PresentationEditForm({
                   value={formData.preferredDate}
                   onChange={onChange}
                   min={new Date().toISOString().split("T")[0]}
-                  className="bg-slate-800 border-slate-700 text-white"
+                  className="bg-white border-slate-700 text-black"
                   required
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="location" className="text-white">
+              <Label htmlFor="location" className="text-black">
                 Location
               </Label>
               <Input
@@ -122,14 +122,14 @@ export function PresentationEditForm({
                 value={formData.location}
                 onChange={onChange}
                 placeholder="Enter location"
-                className="bg-slate-800 border-slate-700 text-white"
+                className="bg-white border-slate-700 text-black"
                 required
               />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="preferredStartTime" className="text-white">
+              <Label htmlFor="preferredStartTime" className="text-black">
                 Start Time
               </Label>
               <Input
@@ -138,12 +138,12 @@ export function PresentationEditForm({
                 type="time"
                 value={formData.preferredStartTime}
                 onChange={onChange}
-                className="bg-slate-800 border-slate-700 text-white"
+                className="bg-white border-slate-700 text-black"
                 required
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="preferredEndTime" className="text-white">
+              <Label htmlFor="preferredEndTime" className="text-black">
                 End Time
               </Label>
               <Input
@@ -152,13 +152,13 @@ export function PresentationEditForm({
                 type="time"
                 value={formData.preferredEndTime}
                 onChange={onChange}
-                className="bg-slate-800 border-slate-700 text-white"
+                className="bg-white border-slate-700 text-black"
                 required
               />
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="file" className="text-white">
+            <Label htmlFor="file" className="text-black">
               Attach File (optional)
             </Label>
             <Input
@@ -167,15 +167,15 @@ export function PresentationEditForm({
               type="file"
               accept=".pdf,.ppt,.pptx"
               onChange={onFileChange}
-              className="bg-slate-800 border-slate-700 text-white"
+              className="bg-white border-slate-700 text-black"
             />
           </div>
         </div>
         <div className="flex gap-2">
-          <Button onClick={onSave} disabled={isSaving}>
+          <Button className="bg-purple-200 text-purple-400 hover:bg-purple-400 hover:text-purple-600" onClick={onSave} disabled={isSaving}>
             {isSaving ? "Saving..." : "Save"}
           </Button>
-          <Button variant="outline" onClick={onCancel} disabled={isSaving}>
+          <Button className=" text-red-600 hover:bg-red-200 hover:text-red-900" variant="outline" onClick={onCancel} disabled={isSaving}>
             Cancel
           </Button>
         </div>

@@ -2,6 +2,11 @@
 import { cookies } from "next/headers"
 import { createServerClient } from "@supabase/ssr"
 
+// Function to calculate credits based on days (1 credit per 5 days, rounded down)
+const calculateCredits = (days: number): number => {
+  return Math.floor(days / 5);
+};
+
 export async function saveProjectDraft(formData: any, projectId?: string) {
   const cookieStore = await cookies()
   const supabase = createServerClient(
@@ -27,6 +32,9 @@ export async function saveProjectDraft(formData: any, projectId?: string) {
   } = await supabase.auth.getUser()
   if (!user) throw new Error("Not authenticated")
 
+  // Calculate credits based on total estimated days
+  const totalCredits = calculateCredits(formData.totalEstimatedDays || 0);
+
   const projectData = {
     student_id: user.id,
     name: formData.name,
@@ -37,6 +45,7 @@ export async function saveProjectDraft(formData: any, projectId?: string) {
     resources: formData.resources,
     deliverables: formData.deliverables,
     total_estimated_days: formData.totalEstimatedDays,
+    total_xp: totalCredits,
     releases: formData.releases,
     screenshots: formData.screenshots || [],
     description: formData.description || null,
@@ -83,6 +92,9 @@ export async function submitProject(formData: any, projectId?: string) {
   } = await supabase.auth.getUser()
   if (!user) throw new Error("Not authenticated")
 
+  // Calculate credits based on total estimated days
+  const totalCredits = calculateCredits(formData.totalEstimatedDays || 0);
+
   const projectData = {
     student_id: user.id,
     name: formData.name,
@@ -93,6 +105,7 @@ export async function submitProject(formData: any, projectId?: string) {
     resources: formData.resources,
     deliverables: formData.deliverables,
     total_estimated_days: formData.totalEstimatedDays,
+    total_xp: totalCredits,
     releases: formData.releases,
     screenshots: formData.screenshots || [],
     description: formData.description || null,

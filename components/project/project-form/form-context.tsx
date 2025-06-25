@@ -13,6 +13,7 @@ export type ProjectFormData = {
   resources: string[];
   deliverables: { functionality: string; details: string; days: number }[];
   totalEstimatedDays: number;
+  totalCredits: number;
   releases: {
     version: string;
     features: string[];
@@ -38,6 +39,7 @@ export type ProjectFormContextType = {
   isSaving: boolean;
   isSubmitting: boolean;
   projectId: string | null;
+  calculateCredits: (days: number) => number;
 };
 
 const defaultFormData: ProjectFormData = {
@@ -50,6 +52,7 @@ const defaultFormData: ProjectFormData = {
   resources: [""],
   deliverables: [{ functionality: "", details: "", days: 1 }],
   totalEstimatedDays: 0,
+  totalCredits: 0,
   releases: [
     { version: "1.0", features: [""] },
     { version: "2.0", features: [""] },
@@ -88,8 +91,22 @@ export function ProjectFormProvider({
 
   const totalSteps = 5; // Total number of steps in the form
 
+  // Function to calculate credits based on days (1 credit per 5 days, rounded down)
+  const calculateCredits = (days: number): number => {
+    return Math.floor(days / 5);
+  };
+
   const updateFormData = (data: Partial<ProjectFormData>) => {
-    setFormData((prev) => ({ ...prev, ...data }));
+    setFormData((prev) => {
+      const updated = { ...prev, ...data };
+      
+      // Auto-calculate credits when totalEstimatedDays changes
+      if (data.totalEstimatedDays !== undefined) {
+        updated.totalCredits = calculateCredits(data.totalEstimatedDays);
+      }
+      
+      return updated;
+    });
   };
 
   const goToNextStep = () => {
@@ -129,6 +146,7 @@ export function ProjectFormProvider({
         resources: formData.resources,
         deliverables: formData.deliverables,
         total_estimated_days: formData.totalEstimatedDays,
+        total_xp: formData.totalCredits,
         releases: formData.releases,
         screenshots: formData.screenshots || [],
         description: formData.description || null,
@@ -188,6 +206,7 @@ export function ProjectFormProvider({
         resources: formData.resources,
         deliverables: formData.deliverables,
         total_estimated_days: formData.totalEstimatedDays,
+        total_xp: formData.totalCredits,
         releases: formData.releases,
         screenshots: formData.screenshots || [],
         description: formData.description || null,
@@ -245,6 +264,7 @@ export function ProjectFormProvider({
         isSaving,
         isSubmitting,
         projectId: projectIdState,
+        calculateCredits,
       }}
     >
       {children}

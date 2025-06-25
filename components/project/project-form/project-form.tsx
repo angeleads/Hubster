@@ -25,6 +25,11 @@ export function ProjectForm({
   const [loading, setLoading] = useState(projectId ? true : false);
   const params = useParams();
 
+  // Function to calculate credits based on days (1 credit per 5 days, rounded down)
+  const calculateCredits = (days: number): number => {
+    return Math.floor(days / 5);
+  };
+
   // If projectId is provided, fetch the project data
   useEffect(() => {
     if (projectId || params?.id) {
@@ -52,6 +57,7 @@ export function ProjectForm({
         programmingLanguages: data.programming_languages || [],
         resources: data.resources || [],
         totalEstimatedDays: data.total_estimated_days || 0,
+        totalCredits: data.total_xp || calculateCredits(data.total_estimated_days || 0),
         description: data.description || "",
         videoUrl: data.video_url || "",
         projectFolderUrl: data.project_folder_url || "",

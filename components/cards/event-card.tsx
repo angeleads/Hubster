@@ -63,7 +63,7 @@ export function EventCard({ event }: EventProps) {
   return (
     <Card className="overflow-hidden hover:shadow-md transition-shadow">
       <CardContent className="p-0">
-        <div className="p-4">
+        <div className="p-6 ">
           <div className="flex justify-between items-start mb-2">
             <h3 className="font-medium text-lg">{event.title}</h3>
             <Badge className={getEventTypeColor(event.event_type)}>
@@ -94,7 +94,7 @@ export function EventCard({ event }: EventProps) {
             </div>
           </div>
         </div>
-        <div className="border-t p-3 bg-gray-50 flex justify-end">
+        <div className="border-t p-3 bg-white flex justify-end">
           <Link href={`/dashboard/presentations/${event.id}`}>
             <Button variant="outline" size="sm">
               View Details

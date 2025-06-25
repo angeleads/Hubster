@@ -17,7 +17,7 @@ import {
   FolderPlus,
   FileText,
   TrendingUp,
-  Users,
+  CircleCheckBig,
   Clock,
 } from "lucide-react";
 
@@ -202,10 +202,10 @@ export default function DashboardPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
+        <Card className="shadow-md hover:shadow-blue-300">
           <CardContent className="p-6">
             <div className="flex items-center">
-              <div className="p-2 bg-blue-100 rounded-lg">
+              <div className="p-2 bg-blue-100 rounded-lg shadow-sm hover:shadow-blue-600">
                 <FileText className="h-6 w-6 text-blue-600" />
               </div>
               <div className="ml-4">
@@ -220,11 +220,11 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="shadow-md hover:shadow-green-300">
           <CardContent className="p-6">
             <div className="flex items-center">
               <div className="p-2 bg-green-100 rounded-lg">
-                <TrendingUp className="h-6 w-6 text-green-600" />
+                <CircleCheckBig className="h-6 w-6 text-green-600" />
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Approved</p>
@@ -236,7 +236,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="shadow-md hover:shadow-amber-300">
           <CardContent className="p-6">
             <div className="flex items-center">
               <div className="p-2 bg-amber-100 rounded-lg">
@@ -254,7 +254,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="shadow-md hover:shadow-purple-300">
           <CardContent className="p-6">
             <div className="flex items-center">
               <div className="p-2 bg-purple-100 rounded-lg">
@@ -310,7 +310,7 @@ export default function DashboardPage() {
             <EmptyState
               icon={<FileText className="h-12 w-12 text-gray-400" />}
               title="No approved projects yet"
-              description="Check back later for new projects from students"
+              description="CircleCheckBig back later for new projects from students"
             />
           )}
         </CardContent>
@@ -321,7 +321,7 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Upcoming Talks & Conferences</CardTitle>
-            <Link href="/dashboard/events">
+            <Link href="/dashboard/presentations">
               <Button variant="outline" size="sm">
                 View All
               </Button>
@@ -337,7 +337,7 @@ export default function DashboardPage() {
             ) : (
               <EmptyState
                 title="No upcoming talks"
-                description="Check back later for new events"
+                description="CircleCheckBig back later for new events"
                 action={
                   profile.role === "student"
                     ? {
@@ -358,7 +358,7 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Upcoming Workshops</CardTitle>
-            <Link href="/dashboard/events">
+            <Link href="/dashboard/presentations">
               <Button variant="outline" size="sm">
                 View All
               </Button>
@@ -374,7 +374,7 @@ export default function DashboardPage() {
             ) : (
               <EmptyState
                 title="No upcoming workshops"
-                description="Check back later for new events"
+                description="back later   for new events"
                 action={
                   profile.role === "admin"
                     ? {

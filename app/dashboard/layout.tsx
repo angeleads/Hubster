@@ -48,7 +48,7 @@ export default function DashboardLayout({
             <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
               <div className="flex items-center flex-shrink-0 px-4 mb-6">
                 <h2 className="text-lg font-semibold text-gray-900">
-                  {isAdmin ? "Admin Panel" : "My Dashboard"}
+                  {isAdmin ? "Astek Panel" : "My Dashboard"}
                 </h2>
               </div>
               <nav className="mt-5 flex-1 px-2 space-y-1">
