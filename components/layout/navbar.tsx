@@ -28,7 +28,7 @@ export default function Navbar() {
 
   const initials = profile.full_name
     .split(" ")
-    .map(name => name[0])
+    .map((name) => name[0])
     .join("")
     .toUpperCase();
 
@@ -39,8 +39,8 @@ export default function Navbar() {
           <div className="flex items-center space-x-4">
             <h1 className="text-xl font-bold text-purple-600">Hubster</h1>
             <div className="hidden sm:block">
-              <StatusBadge 
-                status={profile.role} 
+              <StatusBadge
+                status={profile.role}
                 size="sm"
                 showIcon={false}
                 className="bg-purple-100 text-purple-800 border-purple-200"
@@ -50,7 +50,10 @@ export default function Navbar() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+              <Button
+                variant="ghost"
+                className="relative h-10 w-10 rounded-full"
+              >
                 <Avatar className="h-10 w-10">
                   <AvatarFallback className="bg-purple-100 text-purple-700 font-medium">
                     {initials}
@@ -61,7 +64,9 @@ export default function Navbar() {
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{profile.full_name}</p>
+                  <p className="text-sm font-medium leading-none">
+                    {profile.full_name}
+                  </p>
                   <p className="text-xs leading-none text-muted-foreground">
                     {profile.email}
                   </p>
@@ -73,12 +78,25 @@ export default function Navbar() {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => router.push("/dashboard/profile")}
+                className="hover:bg-purple-200 hover:text-purple-600"
+              >
+                <User className="mr-2 h-4 w-4" />
+                <span>Profile</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => router.push("/dashboard/settings")}
+                className="hover:bg-purple-200 hover:text-purple-600"
+              >
                 <Settings className="mr-2 h-4 w-4" />
                 <span>Settings</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleSignOut}>
+              <DropdownMenuItem
+                onClick={handleSignOut}
+                className="hover:bg-red-200 hover:text-red-400"
+              >
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Log out</span>
               </DropdownMenuItem>

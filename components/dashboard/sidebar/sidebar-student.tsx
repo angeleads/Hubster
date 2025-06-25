@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { FolderOpen, Presentation, Home, User } from "lucide-react";
+import { FolderOpen, Presentation, Home, User, TableOfContents, GalleryHorizontalEnd } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navigation = [
@@ -12,7 +12,8 @@ const navigation = [
     href: "/dashboard/presentations",
     icon: Presentation,
   },
-  { name: "Profile", href: "/dashboard/profile", icon: User },
+  { name: "Gallery", href: "/dashboard/gallery", icon: GalleryHorizontalEnd },
+  { name: "FAQ", href: "/what-is-hub", icon: TableOfContents },
 ];
 
 export default function SidebarStudent() {

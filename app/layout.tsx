@@ -6,11 +6,11 @@ import { AuthProvider } from "@/contexts/auth-context"
 import { SessionMonitor } from "@/components/utils/session-monitor"
 import { Toaster } from "@/components/ui/toaster"
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"]})
 
 export const metadata: Metadata = {
   title: "Hubster",
-  description: "New EPITECH's HUB tool for students",
+  description: "EPITECH's HUB tool for students",
 }
 
 export default function RootLayout({
