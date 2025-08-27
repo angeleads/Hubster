@@ -49,6 +49,22 @@ export default function PresentationDetailPage() {
     location: "",
     file: null as File | null,
   });
+  const [presenterName, setPresenterName] = useState("Unknown Presenter")
+
+  useEffect(() => {
+    async function fetchPresenterName() {
+      if (!event?.presenter_id) return
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("full_name")
+        .eq("id", event.presenter_id)
+        .single()
+      if (data && data.full_name) {
+        setPresenterName(data.full_name)
+      }
+    }
+    fetchPresenterName()
+  }, [event?.presenter_id])
 
   const eventId = params.id as string;
 

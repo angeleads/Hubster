@@ -18,8 +18,13 @@ import { PlusCircle, Trash2, Calculator } from "lucide-react";
 import { useEffect } from "react";
 
 export function Step4Deliverables() {
-  const { formData, updateFormData, goToNextStep, goToPreviousStep, calculateCredits } =
-    useProjectForm();
+  const {
+    formData,
+    updateFormData,
+    goToNextStep,
+    goToPreviousStep,
+    calculateCredits,
+  } = useProjectForm();
 
   // Ensure deliverables is always an array
   useEffect(() => {
@@ -63,7 +68,7 @@ export function Step4Deliverables() {
         updateFormData({ totalEstimatedDays: total });
       }
     }
-  }, [formData.deliverables, formData.totalEstimatedDays]);
+  }, [formData.deliverables, formData.totalEstimatedDays, updateFormData]);
 
   const handleAddDeliverable = () => {
     updateFormData({
@@ -108,7 +113,7 @@ export function Step4Deliverables() {
           {deliverables.map((deliverable, index) => (
             <div
               key={index}
-              className="space-y-4 p-4 border rounded-md relative"
+              className="space-y-4 p-4 rounded-md relative border border-purple-200"
             >
               {index > 0 && (
                 <Button
@@ -126,6 +131,7 @@ export function Step4Deliverables() {
                 <Label htmlFor={`functionality-${index}`}>Functionality</Label>
                 <Input
                   id={`functionality-${index}`}
+                  className="border-2 border-purple-200 focus:border-purple-400"
                   value={deliverable.functionality}
                   onChange={(e) =>
                     handleDeliverableChange(
@@ -144,6 +150,7 @@ export function Step4Deliverables() {
                 <Textarea
                   id={`details-${index}`}
                   value={deliverable.details}
+                  className="border-2 border-purple-200 focus:border-purple-400"
                   onChange={(e) =>
                     handleDeliverableChange(index, "details", e.target.value)
                   }
@@ -159,6 +166,7 @@ export function Step4Deliverables() {
                   id={`days-${index}`}
                   type="number"
                   min="1"
+                  className="border-2 border-purple-200 focus:border-purple-400"
                   value={deliverable.days}
                   onChange={(e) =>
                     handleDeliverableChange(
@@ -177,7 +185,7 @@ export function Step4Deliverables() {
             type="button"
             variant="outline"
             onClick={handleAddDeliverable}
-            className="w-full"
+            className="w-full bg-transparen bg-purple-50 hover:bg-purple-100 text-purple-700 hover:text-purple-800t"
           >
             <PlusCircle className="h-4 w-4 mr-2" />
             Add Another Deliverable
@@ -189,32 +197,42 @@ export function Step4Deliverables() {
                 <Calculator className="h-5 w-5" />
                 <h3 className="font-semibold text-lg">Project Estimation</h3>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-white p-4 rounded-md border border-purple-100">
                   <div className="flex justify-between items-center">
-                    <span className="font-medium text-gray-700">Total Estimated Time:</span>
+                    <span className="font-medium text-gray-700">
+                      Total Estimated Time:
+                    </span>
                     <span className="font-bold text-purple-600 text-lg">
                       {formData.totalEstimatedDays} days
                     </span>
                   </div>
                 </div>
-                
+
                 <div className="bg-white p-4 rounded-md border border-purple-100">
                   <div className="flex justify-between items-center">
-                    <span className="font-medium text-gray-700">Credits Earned:</span>
+                    <span className="font-medium text-gray-700">
+                      Credits Earned:
+                    </span>
                     <span className="font-bold text-green-600 text-lg">
                       {formData.totalCredits} credits
                     </span>
                   </div>
                 </div>
               </div>
-              
+
               <div className="text-sm text-gray-600 bg-white p-3 rounded-md border border-purple-100">
                 <p className="font-medium mb-1">Credit Calculation:</p>
                 <p>• 1 credit = 5 days of work</p>
-                <p>• Credits are calculated by rounding down to the nearest multiple of 5</p>
-                <p>• Example: 19 days = 3 credits (15 days), 21 days = 4 credits (20 days)</p>
+                <p>
+                  • Credits are calculated by rounding down to the nearest
+                  multiple of 5
+                </p>
+                <p>
+                  • Example: 19 days = 3 credits (15 days), 21 days = 4 credits
+                  (20 days)
+                </p>
               </div>
             </div>
           </div>
@@ -225,7 +243,12 @@ export function Step4Deliverables() {
         <Button type="button" variant="outline" onClick={goToPreviousStep}>
           Previous Step
         </Button>
-        <Button type="submit"  className="bg-purple-300 text-purple-600 hover:bg-purple-400 hover:text-purple-800">Next Step</Button>
+        <Button
+          type="submit"
+          className="bg-purple-300 text-purple-600 hover:bg-purple-400 hover:text-purple-800"
+        >
+          Next Step
+        </Button>
       </div>
     </form>
   );

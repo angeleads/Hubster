@@ -22,14 +22,14 @@ import {
 
 type Project = {
   id: string;
-  name: string;
-  summary: string;
+  title: string;
+  description: string;
   status: string;
-  total_estimated_days: number;
+  timeline_estimate: string;
   created_at: string;
-  presentation_date: string | null;
-  student_id: string;
-  programmingLanguages?: string[];
+  submitted_at: string | null;
+  user_id: string;
+  programming_languages?: string[];
   profiles: {
     full_name: string;
     email: string;
@@ -66,7 +66,7 @@ export default function AdminProjectsPage() {
         .select(
           `
           *,
-          profiles:student_id (
+          profiles:user_id (
             full_name,
             email
           )
@@ -112,8 +112,8 @@ export default function AdminProjectsPage() {
   const filteredProjects = projects.filter((project) => {
     const matchesSearch =
       searchQuery === "" ||
-      project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       project.profiles?.full_name
         ?.toLowerCase()
         .includes(searchQuery.toLowerCase());
@@ -157,7 +157,7 @@ export default function AdminProjectsPage() {
         onCheckedChange={() => handleStatusFilterChange("submitted")}
       >
         <div className="flex items-center">
-          <StatusBadge status="submitted" size="sm" />
+          <StatusBadge status="submitted" />
           <span className="ml-2">Submitted</span>
         </div>
       </DropdownMenuCheckboxItem>
@@ -166,7 +166,7 @@ export default function AdminProjectsPage() {
         onCheckedChange={() => handleStatusFilterChange("approved")}
       >
         <div className="flex items-center">
-          <StatusBadge status="approved" size="sm" />
+          <StatusBadge status="approved" />
           <span className="ml-2">Approved</span>
         </div>
       </DropdownMenuCheckboxItem>
@@ -175,7 +175,7 @@ export default function AdminProjectsPage() {
         onCheckedChange={() => handleStatusFilterChange("rejected")}
       >
         <div className="flex items-center">
-          <StatusBadge status="rejected" size="sm" />
+          <StatusBadge status="rejected" />
           <span className="ml-2">Rejected</span>
         </div>
       </DropdownMenuCheckboxItem>
@@ -184,7 +184,7 @@ export default function AdminProjectsPage() {
         onCheckedChange={() => handleStatusFilterChange("draft")}
       >
         <div className="flex items-center">
-          <StatusBadge status="draft" size="sm" />
+          <StatusBadge status="draft" />
           <span className="ml-2">Draft</span>
         </div>
       </DropdownMenuCheckboxItem>
@@ -243,13 +243,12 @@ export default function AdminProjectsPage() {
                         <ProjectCard
                           key={project.id}
                           id={project.id}
-                          name={project.name}
-                          summary={project.summary}
-                          programmingLanguages={project.programmingLanguages ?? []}
+                          title={project.title}
+                          description={project.description}
                           status={project.status}
-                          totalEstimatedDays={project.total_estimated_days}
+                          timelineEstimate={project.timeline_estimate}
                           createdAt={project.created_at}
-                          presentationDate={project.presentation_date}
+                          submittedAt={project.submitted_at}
                           studentName={project.profiles?.full_name}
                           isAdmin={true}
                         />
@@ -278,13 +277,12 @@ export default function AdminProjectsPage() {
                         <ProjectCard
                           key={project.id}
                           id={project.id}
-                          name={project.name}
-                          summary={project.summary}
-                          programmingLanguages={project.programmingLanguages ?? []}
+                          title={project.title}
+                          description={project.description}
                           status={project.status}
-                          totalEstimatedDays={project.total_estimated_days}
+                          timelineEstimate={project.timeline_estimate}
                           createdAt={project.created_at}
-                          presentationDate={project.presentation_date}
+                          submittedAt={project.submitted_at}
                           studentName={project.profiles?.full_name}
                           isAdmin={true}
                         />

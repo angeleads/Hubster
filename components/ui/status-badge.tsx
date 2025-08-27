@@ -1,107 +1,74 @@
 import { Badge } from "@/components/ui/badge";
-import {
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-  Clock,
-  Loader2,
-  FileText,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
 
-type StatusBadgeProps = {
-  status: string;
-  size?: "sm" | "md" | "lg";
-  showIcon?: boolean;
+type Status =
+  | "draft"
+  | "submitted"
+  | "approved"
+  | "rejected"
+  | "in_progress"
+  | "completed";
+
+interface StatusBadgeProps {
+  status: Status;
   className?: string;
-};
+}
 
-export function StatusBadge({ 
-  status, 
-  size = "md", 
-  showIcon = true,
-  className 
-}: StatusBadgeProps) {
-  const getStatusIcon = (status: string) => {
-    const iconSize = size === "sm" ? "h-3 w-3" : "h-4 w-4";
-    
+export function StatusBadge({ status, className }: StatusBadgeProps) {
+  const getStatusConfig = (status: Status) => {
     switch (status) {
-      case "approved":
-        return <CheckCircle className={iconSize} />;
-      case "rejected":
-        return <XCircle className={iconSize} />;
-      case "submitted":
-        return <AlertCircle className={iconSize} />;
-      case "in_progress":
-        return <Loader2 className={cn(iconSize, "animate-spin")} />;
-      case "completed":
-        return <CheckCircle className={iconSize} />;
       case "draft":
-        return <FileText className={iconSize} />;
-      default:
-        return <Clock className={iconSize} />;
-    }
-  };
-
-  const getStatusConfig = (status: string) => {
-    switch (status) {
-      case "approved":
         return {
-          color: "bg-emerald-100 text-emerald-800 border-emerald-200",
-          label: "Approved"
-        };
-      case "rejected":
-        return {
-          color: "bg-red-100 text-red-800 border-red-200",
-          label: "Rejected"
+          label: "Draft",
+          variant: "secondary" as const,
+          className: "bg-slate-100 text-slate-700 hover:bg-slate-200",
         };
       case "submitted":
         return {
-          color: "bg-amber-100 text-amber-800 border-amber-200",
-          label: "Pending Review"
+          label: "Submitted",
+          variant: "default" as const,
+          className: "bg-yellow-100 text-yellow-700 hover:bg-yellow-200",
+        };
+      case "approved":
+        return {
+          label: "Approved",
+          variant: "default" as const,
+          className: "bg-green-100 text-green-700 hover:bg-green-200",
+        };
+      case "rejected":
+        return {
+          label: "Rejected",
+          variant: "destructive" as const,
+          className: "bg-red-100 text-red-700 hover:bg-red-200",
         };
       case "in_progress":
         return {
-          color: "bg-blue-100 text-blue-800 border-blue-200",
-          label: "In Progress"
+          label: "In Progress",
+          variant: "default" as const,
+          className: "bg-yellow-100 text-yellow-700 hover:bg-yellow-200",
         };
       case "completed":
         return {
-          color: "bg-purple-100 text-purple-800 border-purple-200",
-          label: "Completed"
-        };
-      case "draft":
-        return {
-          color: "bg-gray-100 text-gray-800 border-gray-200",
-          label: "Draft"
+          label: "Completed",
+          variant: "default" as const,
+          className: "bg-purple-100 text-purple-700 hover:bg-purple-200",
         };
       default:
         return {
-          color: "bg-gray-100 text-gray-800 border-gray-200",
-          label: status.replace("_", " ")
+          label: "Unknown",
+          variant: "secondary" as const,
+          className: "bg-slate-100 text-slate-700",
         };
     }
-  };
-
-  const sizeClasses = {
-    sm: "text-xs py-1 px-2",
-    md: "text-xs py-1.5 px-3",
-    lg: "text-sm py-2 px-4",
   };
 
   const config = getStatusConfig(status);
 
   return (
     <Badge
-      className={cn(
-        "inline-flex items-center gap-1.5 font-medium border",
-        config.color,
-        sizeClasses[size],
-        className
-      )}
+      variant={config.variant}
+      className={`${config.className} ${className || ""}`}
     >
-      {showIcon && getStatusIcon(status)}
-      <span>{config.label}</span>
+      {config.label}
     </Badge>
   );
 }

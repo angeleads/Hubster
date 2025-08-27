@@ -20,6 +20,12 @@ export function Step3Technical() {
   const { formData, updateFormData, goToNextStep, goToPreviousStep } =
     useProjectForm();
 
+  console.log("Step3Technical formData:", {
+    material: formData.material,
+    resources: formData.resources,
+    allFormData: formData,
+  });
+
   const handleAddLanguage = () => {
     updateFormData({
       programmingLanguages: [...formData.programmingLanguages, ""],
@@ -58,6 +64,10 @@ export function Step3Technical() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Submitting Step3 with:", {
+      material: formData.material,
+      resources: formData.resources,
+    });
     goToNextStep();
   };
 
@@ -76,6 +86,7 @@ export function Step3Technical() {
             <Textarea
               id="material"
               value={formData.material}
+              className="border-2 border-purple-200 focus:border-purple-400"
               onChange={(e) => updateFormData({ material: e.target.value })}
               placeholder="Describe any hardware or special materials needed for your project"
               rows={3}
@@ -88,6 +99,7 @@ export function Step3Technical() {
               <div key={index} className="flex items-center gap-2">
                 <Input
                   value={language}
+                  className="border-2 border-purple-200 focus:border-purple-400"
                   onChange={(e) => handleLanguageChange(index, e.target.value)}
                   placeholder="e.g., JavaScript, Python"
                   required
@@ -109,7 +121,7 @@ export function Step3Technical() {
               type="button"
               variant="outline"
               onClick={handleAddLanguage}
-              className="w-full mt-2"
+              className="w-full mt-2 bg-purple-50 hover:bg-purple-100 text-purple-700 hover:text-purple-800"
             >
               <PlusCircle className="h-4 w-4 mr-2" />
               Add Another Language
@@ -122,6 +134,7 @@ export function Step3Technical() {
               <div key={index} className="flex items-center gap-2">
                 <Input
                   value={resource}
+                  className="border-2 border-purple-200 focus:border-purple-400"
                   onChange={(e) => handleResourceChange(index, e.target.value)}
                   placeholder="e.g., https://api.example.com"
                   required
@@ -143,7 +156,7 @@ export function Step3Technical() {
               type="button"
               variant="outline"
               onClick={handleAddResource}
-              className="w-full mt-2"
+              className="mt-2 w-full bg-purple-50 hover:bg-purple-100 text-purple-700 hover:text-purple-800"
             >
               <PlusCircle className="h-4 w-4 mr-2" />
               Add Another Resource
@@ -156,7 +169,12 @@ export function Step3Technical() {
         <Button type="button" variant="outline" onClick={goToPreviousStep}>
           Previous Step
         </Button>
-        <Button type="submit" className="bg-purple-300 text-purple-600 hover:bg-purple-400 hover:text-purple-800">Next Step</Button>
+        <Button
+          type="submit"
+          className="bg-purple-300 text-purple-600 hover:bg-purple-400 hover:text-purple-800"
+        >
+          Next Step
+        </Button>
       </div>
     </form>
   );

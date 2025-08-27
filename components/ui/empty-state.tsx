@@ -19,7 +19,7 @@ interface EmptyStateProps {
 
 export function EmptyState({ 
   icon, 
-  title, 
+  title,
   description, 
   action,
   className 

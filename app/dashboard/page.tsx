@@ -22,32 +22,38 @@ import {
 } from "lucide-react";
 
 type Project = {
-  id: string;
-  name: string;
-  summary: string;
-  status: string;
-  total_estimated_days: number;
-  created_at: string;
-  presentation_date: string | null;
-  student_id: string;
-  programming_languages?: string[];
+  id: string
+  title: string
+  description: string | null
+  status: string
+  created_at: string
+  submitted_at: string | null
+  user_id: string
+  timeline_estimate: string
+  likes_count: number
   profiles?: {
-    full_name: string;
-    email: string;
-  };
-};
+    full_name: string
+    email: string
+  }
+}
 
 type Event = {
-  id: string;
-  title: string;
-  description: string;
-  event_type: "talk" | "conference" | "workshop" | "user_group";
-  start_date: string;
-  end_date: string;
-  location: string;
-  presenter_id: string;
-  presenter_name: string;
-};
+  id: string
+  title: string
+  description: string | null
+  event_type: "talk" | "user_group" | "workshop" | "conference"
+  status: string
+  created_at: string
+  start_date: string
+  end_date: string
+  duration_minutes: number
+  location: string | null
+  presenter_id: string
+  profiles?: {
+    full_name: string
+  }
+}
+
 
 type DashboardStats = {
   totalProjects: number;
@@ -87,7 +93,7 @@ export default function DashboardPage() {
       const { data: projectsData, error: projectsError } = await supabase
         .from("projects")
         .select(`*`)
-        .eq("status", "approved")
+        .in("status", ["approved", "completed", "in_progress"])
         .order("created_at", { ascending: false })
         .limit(6);
 
@@ -102,7 +108,7 @@ export default function DashboardPage() {
         .from("events")
         .select("*")
         .in("event_type", ["talk", "conference"])
-        .eq("status", "approved")
+        .in("status", ["approved", "completed", "in_progress"])
         .gte("start_date", new Date().toISOString())
         .order("start_date", { ascending: true })
         .limit(3);
@@ -118,7 +124,7 @@ export default function DashboardPage() {
         .from("events")
         .select("*")
         .in("event_type", ["workshop", "user_group"])
-        .eq("status", "approved")
+        .in("status", ["approved", "completed", "in_progress"])
         .gte("start_date", new Date().toISOString())
         .order("start_date", { ascending: true })
         .limit(3);
@@ -135,7 +141,7 @@ export default function DashboardPage() {
         supabase
           .from("events")
           .select("*", { count: "exact" })
-          .eq("status", "approved")
+          .in("status", ["approved", "completed", "in_progress"])
           .gte("start_date", new Date().toISOString()),
       ]);
 
@@ -294,15 +300,15 @@ export default function DashboardPage() {
                 <ProjectCard
                   key={project.id}
                   id={project.id}
-                  name={project.name}
-                  summary={project.summary}
-                  programmingLanguages={project.programming_languages || []}
+                  title={project.title}
+                  description={project.description}
                   status={project.status}
-                  totalEstimatedDays={project.total_estimated_days}
+                  timelineEstimate={project.timeline_estimate}
                   createdAt={project.created_at}
-                  presentationDate={project.presentation_date}
+                  submittedAt={project.submitted_at}
                   studentName={project.profiles?.full_name}
-                  isAdmin={isAdmin}
+                  likesCount={project.likes_count}
+                  isAdmin={profile?.role === "admin" || profile?.role === "super_admin"}
                 />
               ))}
             </div>

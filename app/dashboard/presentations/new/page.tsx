@@ -1,193 +1,100 @@
-"use client";
+"use client"
 
-import type React from "react";
+import type React from "react"
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/contexts/auth-context";
-import { supabase } from "@/lib/supabase";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Calendar, Clock, Upload } from "lucide-react";
-import Link from "next/link";
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/contexts/auth-context"
+import { supabase } from "@/lib/supabase"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useToast } from "@/hooks/use-toast"
+import { Calendar, Clock, MapPin } from "lucide-react"
 
 export default function NewPresentationPage() {
-  const { profile } = useAuth();
-  const router = useRouter();
-  const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { user, profile } = useAuth()
+  const router = useRouter()
+  const { toast } = useToast()
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     eventType: "talk",
     preferredDate: "",
-    preferredStartTime: "",
-    preferredEndTime: "",
+    preferredTime: "",
+    duration: "60",
     location: "",
-    file: null as File | null,
-  });
-  const [filePreview, setFilePreview] = useState("");
+  })
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
+  }
 
   const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setFormData((prev) => ({ ...prev, file }));
-
-      // Create a preview URL for the file
-      const reader = new FileReader();
-      reader.onload = () => {
-        setFilePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+    setFormData((prev) => ({ ...prev, [name]: value }))
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!profile) return;
+    e.preventDefault()
+    if (!user || !profile) return
 
-    setIsSubmitting(true);
+    setIsSubmitting(true)
 
     try {
-      // Calculate end date based on start date and times
-      const startDate = new Date(
-        `${formData.preferredDate}T${formData.preferredStartTime}`
-      );
-      const endDate = new Date(
-        `${formData.preferredDate}T${formData.preferredEndTime}`
-      );
+      // Calculate start and end dates
+      const startDate = new Date(`${formData.preferredDate}T${formData.preferredTime}`)
+      const endDate = new Date(startDate.getTime() + Number.parseInt(formData.duration) * 60000)
 
-      // Upload file if provided
-      let fileUrl = null;
-      if (formData.file) {
-        try {
-          const fileExt = formData.file.name.split(".").pop();
-          const fileName = `${profile.id}-${Date.now()}.${fileExt}`;
-          const filePath = `${profile.id}/${fileName}`; // Add user ID as folder for better organization
+      const { error } = await supabase.from("events").insert({
+        user_id: user.id,
+        presenter_id: user.id,
+        title: formData.title,
+        description: formData.description,
+        event_type: formData.eventType as "talk" | "user_group" | "workshop" | "conference",
+        preferred_date: startDate.toISOString(),
+        start_date: startDate.toISOString(),
+        end_date: endDate.toISOString(),
+        duration_minutes: Number.parseInt(formData.duration),
+        location: formData.location,
+        status: "pending",
+      })
 
-          // Try to upload the file
-          const { error: uploadError, data } = await supabase.storage
-            .from("presentations")
-            .upload(filePath, formData.file);
-
-          if (uploadError) {
-            console.error("File upload error:", uploadError);
-            // Show warning but continue with submission
-            toast({
-              title: "File Upload Failed",
-              description:
-                "Your presentation will be submitted without the file attachment.",
-              variant: "default",
-            });
-          } else {
-            // Get public URL only if upload succeeded
-            const { data: urlData } = supabase.storage
-              .from("presentations")
-              .getPublicUrl(filePath);
-            fileUrl = urlData.publicUrl;
-          }
-        } catch (error) {
-          console.error("File upload error:", error);
-          // Show warning but continue with submission
-          toast({
-            title: "File Upload Failed",
-            description:
-              "Your presentation will be submitted without the file attachment.",
-            variant: "default",
-          });
-        }
-      }
-
-      // Create event record
-      const { data: event, error } = await supabase
-        .from("events")
-        .insert({
-          title: formData.title,
-          description: formData.description,
-          event_type: formData.eventType,
-          start_date: startDate.toISOString(),
-          end_date: endDate.toISOString(),
-          location: formData.location,
-          presenter_id: profile.id,
-          presenter_name: profile.full_name,
-          status: "pending",
-          file_url: fileUrl,
-        })
-        .select()
-        .single();
-
-      if (error) throw error;
+      if (error) throw error
 
       toast({
         title: "Presentation Scheduled",
         description: "Your presentation has been submitted for approval.",
-      });
+      })
 
-      router.push("/dashboard/presentations");
+      router.push("/dashboard/presentations")
     } catch (error) {
-      console.error("Error scheduling presentation:", error);
+      console.error("Error creating presentation:", error)
       toast({
         title: "Error",
         description: "Failed to schedule presentation. Please try again.",
         variant: "destructive",
-      });
+      })
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-2xl mx-auto space-y-6">
       <div>
-        <Link
-          href="/dashboard/presentations"
-          className="text-sm text-gray-500 hover:text-gray-700 flex items-center mb-2"
-        >
-          <ArrowLeft className="h-4 w-4 mr-1" />
-          Back to Presentations
-        </Link>
-        <h2 className="text-2xl font-bold text-gray-900">
-          Schedule a Presentation
-        </h2>
-        <p className="text-gray-600">
-          Fill out the form to request a presentation slot
-        </p>
+        <h1 className="text-3xl font-bold text-gray-900">Schedule New Presentation</h1>
+        <p className="text-gray-600 mt-2">Submit your presentation for approval by the admin team.</p>
       </div>
 
       <Card>
         <CardHeader>
           <CardTitle>Presentation Details</CardTitle>
-          <CardDescription>
-            Provide information about your presentation
-          </CardDescription>
+          <CardDescription>Fill in the information about your presentation</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -196,9 +103,7 @@ export default function NewPresentationPage() {
                 <Label htmlFor="eventType">Presentation Type</Label>
                 <Select
                   value={formData.eventType}
-                  onValueChange={(value) =>
-                    handleSelectChange("eventType", value)
-                  }
+                  onValueChange={(value) => handleSelectChange("eventType", value)}
                   required
                 >
                   <SelectTrigger>
@@ -207,6 +112,8 @@ export default function NewPresentationPage() {
                   <SelectContent>
                     <SelectItem value="talk">Talk</SelectItem>
                     <SelectItem value="user_group">User Group</SelectItem>
+                    <SelectItem value="workshop">Workshop</SelectItem>
+                    <SelectItem value="conference">Conference</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -232,15 +139,16 @@ export default function NewPresentationPage() {
                   onChange={handleChange}
                   placeholder="Describe your presentation"
                   rows={4}
-                  required
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="preferredDate">Preferred Date</Label>
                   <div className="flex items-center">
-                    <Calendar className="h-4 w-4 mr-2 text-gray-500" />
+                    <Calendar className="h-4 w-4 mr-2 text-gray-700" />
+                    <Label htmlFor="preferredDate">Preferred Date</Label>
+                  </div>
+                  <div className="flex items-center">
                     <Input
                       id="preferredDate"
                       name="preferredDate"
@@ -254,121 +162,75 @@ export default function NewPresentationPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="location">Location</Label>
-                  <Input
-                    id="location"
-                    name="location"
-                    value={formData.location}
-                    onChange={handleChange}
-                    placeholder="Where will this be held?"
-                    required
-                  />
+                  <div className="flex items-center">
+                    <Clock className="h-4 w-4 mr-2 text-gray-700" />
+                    <Label htmlFor="preferredTime">Preferred Time</Label>
+                  </div>
+                  <div className="flex items-center">
+                    <Input
+                      id="preferredTime"
+                      name="preferredTime"
+                      type="time"
+                      value={formData.preferredTime}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="preferredStartTime">Start Time</Label>
-                  <div className="flex items-center">
-                    <Clock className="h-4 w-4 mr-2 text-gray-500" />
-                    <Input
-                      id="preferredStartTime"
-                      name="preferredStartTime"
-                      type="time"
-                      value={formData.preferredStartTime}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="preferredEndTime">End Time</Label>
-                  <div className="flex items-center">
-                    <Clock className="h-4 w-4 mr-2 text-gray-500" />
-                    <Input
-                      id="preferredEndTime"
-                      name="preferredEndTime"
-                      type="time"
-                      value={formData.preferredEndTime}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="file">Presentation File (Optional)</Label>
-                <div className="border-2 border-dashed rounded-md p-4 hover:bg-gray-50 transition-colors">
-                  <label
-                    htmlFor="file"
-                    className="flex flex-col items-center justify-center cursor-pointer"
+                  <Label htmlFor="duration">Duration</Label>
+                  <Select
+                    value={formData.duration}
+                    onValueChange={(value) => handleSelectChange("duration", value)}
+                    required
                   >
-                    <Upload className="h-8 w-8 text-gray-400 mb-2" />
-                    <span className="text-sm text-gray-500">
-                      {formData.file
-                        ? formData.file.name
-                        : "Click to upload or drag and drop"}
-                    </span>
-                    <span className="text-xs text-gray-400 mt-1">
-                      PDF, PPTX, or DOC up to 10MB
-                    </span>
-                    <Input
-                      id="file"
-                      name="file"
-                      type="file"
-                      className="hidden"
-                      onChange={handleFileChange}
-                      accept=".pdf,.pptx,.doc,.docx"
-                    />
-                  </label>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select duration" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="60">1 hour</SelectItem>
+                      <SelectItem value="90">1.5 hours</SelectItem>
+                      <SelectItem value="120">2 hours</SelectItem>
+                      <SelectItem value="150">2.5 hours</SelectItem>
+                      <SelectItem value="180">3 hours</SelectItem>
+                      <SelectItem value="210">3.5 hours</SelectItem>
+                      <SelectItem value="240">4 hours</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
-                {filePreview && (
-                  <div className="mt-2 p-2 bg-gray-50 rounded-md">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0">
-                        <div className="h-8 w-8 bg-blue-100 rounded-md flex items-center justify-center">
-                          <span className="text-xs text-blue-800">
-                            {formData.file?.name
-                              .split(".")
-                              .pop()
-                              ?.toUpperCase()}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="ml-3 flex-1 overflow-hidden">
-                        <p className="text-sm font-medium text-gray-900 truncate">
-                          {formData.file?.name}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {formData.file?.size
-                            ? (formData.file.size / 1024 / 1024).toFixed(2) +
-                              " MB"
-                            : ""}
-                        </p>
-                      </div>
-                    </div>
+
+                <div className="space-y-2 pt-2">
+                  <div className="flex items-center">
+                    <MapPin className="h-4 w-4 mr-2 text-gray-700" />
+                    <Label htmlFor="location">Location</Label>
                   </div>
-                )}
+                  <div className="flex items-center">
+                    <Input
+                      id="location"
+                      name="location"
+                      value={formData.location}
+                      onChange={handleChange}
+                      placeholder="Where will this be held?"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="outline" onClick={() => router.back()}>
+                Cancel
+              </Button>
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? (
-                  <>
-                    <div className="animate-spin h-4 w-4 mr-2 border-2 border-b-transparent rounded-full"></div>
-                    Submitting...
-                  </>
-                ) : (
-                  "Schedule Presentation"
-                )}
+                {isSubmitting ? "Scheduling..." : "Schedule Presentation"}
               </Button>
             </div>
           </form>
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

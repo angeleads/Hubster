@@ -7,6 +7,8 @@ import {
   User,
   CircleCheckBig,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 type Props = {
   event: any;
@@ -15,6 +17,22 @@ type Props = {
 };
 
 export function PresentationInfo({ event, formatDate, formatTime }: Props) {
+const [presenterName, setPresenterName] = useState("Unknown Presenter")
+
+  useEffect(() => {
+    async function fetchPresenterName() {
+      if (!event?.presenter_id) return
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("full_name")
+        .eq("id", event.presenter_id)
+        .single()
+      if (data && data.full_name) {
+        setPresenterName(data.full_name)
+      }
+    }
+    fetchPresenterName()
+  }, [event?.presenter_id])
   return (
     <div className="space-y-6">
       <Card className="bg-white border-purple-400 border-2">
@@ -48,7 +66,7 @@ export function PresentationInfo({ event, formatDate, formatTime }: Props) {
         <CardContent>
           <div className="flex items-center">
             <User className="h-4 w-4 mr-2 text-slate-900" />
-            <span className="text-slate-800">{event.presenter_name}</span>
+            <span className="text-slate-800">{presenterName}</span>
           </div>
         </CardContent>
       </Card>

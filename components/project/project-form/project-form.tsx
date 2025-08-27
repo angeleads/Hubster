@@ -1,169 +1,83 @@
-"use client";
+"use client"
 
-import { ProjectFormProvider, type ProjectFormData } from "./form-context";
-import { Step1Basics } from "./steps/step-1-basics";
-import { Step2Functional } from "./steps/step-2-functional";
-import { Step3Technical } from "./steps/step-3-technical";
-import { Step4Deliverables } from "./steps/step-4-deliverables";
-import { Step5Releases } from "./steps/step-5-releases";
-import { Card } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
-import { useParams } from "next/navigation";
+import { Step1Basics } from "./steps/step-1-basics"
+import { Step2Functional } from "./steps/step-2-functional"
+import { Step3Technical } from "./steps/step-3-technical"
+import { Step4Deliverables } from "./steps/step-4-deliverables"
+import { Step5Releases } from "./steps/step-5-releases"
+import { useProjectForm } from "./form-context"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { CheckCircle, Circle } from "lucide-react"
 
-export function ProjectForm({
-  initialData,
-  projectId,
-}: {
-  initialData?: Partial<ProjectFormData>;
-  projectId?: string;
-}) {
-  const [formData, setFormData] = useState<
-    Partial<ProjectFormData> | undefined
-  >(initialData);
-  const [loading, setLoading] = useState(projectId ? true : false);
-  const params = useParams();
+const steps = [
+  { title: "Project Basics", description: "Basic project information" },
+  { title: "Functional Requirements", description: "What your project should do" },
+  { title: "Technical Details", description: "Technical requirements and deliverables" },
+  { title: "Deliverables", description: "Define your project deliverables" },
+  { title: "Review & Submit", description: "Review and submit your project" },
+]
 
-  // Function to calculate credits based on days (1 credit per 5 days, rounded down)
-  const calculateCredits = (days: number): number => {
-    return Math.floor(days / 5);
-  };
+export function ProjectForm() {
+  const { currentStep, totalSteps } = useProjectForm()
 
-  // If projectId is provided, fetch the project data
-  useEffect(() => {
-    if (projectId || params?.id) {
-      const id = projectId || params?.id;
-      fetchProject(id as string);
+  const renderStep = () => {
+    switch (currentStep) {
+      case 0:
+        return <Step1Basics />
+      case 1:
+        return <Step2Functional />
+      case 2:
+        return <Step3Technical />
+      case 3:
+        return <Step4Deliverables />
+      case 4:
+        return <Step5Releases />
+      default:
+        return <Step1Basics />
     }
-  }, [projectId, params?.id]);
-
-  const fetchProject = async (id: string) => {
-    try {
-      const { data, error } = await supabase
-        .from("projects")
-        .select("*")
-        .eq("id", id)
-        .single();
-
-      if (error) throw error;
-
-      // Process the data to match our form structure
-      const processedData: Partial<ProjectFormData> = {
-        name: data.name,
-        summary: data.summary,
-        functionalPurpose: data.functional_purpose || [],
-        material: data.material || "",
-        programmingLanguages: data.programming_languages || [],
-        resources: data.resources || [],
-        totalEstimatedDays: data.total_estimated_days || 0,
-        totalCredits: data.total_xp || calculateCredits(data.total_estimated_days || 0),
-        description: data.description || "",
-        videoUrl: data.video_url || "",
-        projectFolderUrl: data.project_folder_url || "",
-      };
-
-      // Parse JSON fields if needed
-      if (typeof data.deliverables === "string") {
-        try {
-          processedData.deliverables = JSON.parse(data.deliverables);
-        } catch (e) {
-          console.error("Error parsing deliverables:", e);
-          processedData.deliverables = [
-            { functionality: "", details: "", days: 1 },
-          ];
-        }
-      } else {
-        processedData.deliverables = data.deliverables || [
-          { functionality: "", details: "", days: 1 },
-        ];
-      }
-
-      if (typeof data.releases === "string") {
-        try {
-          processedData.releases = JSON.parse(data.releases);
-        } catch (e) {
-          console.error("Error parsing releases:", e);
-          processedData.releases = [
-            { version: "1.0", features: [""] },
-            { version: "2.0", features: [""] },
-            { version: "3.0", features: [""] },
-            { version: "4.0", features: [""] },
-          ];
-        }
-      } else {
-        processedData.releases = data.releases || [
-          { version: "1.0", features: [""] },
-          { version: "2.0", features: [""] },
-          { version: "3.0", features: [""] },
-          { version: "4.0", features: [""] },
-        ];
-      }
-
-      // Add default leaders if not present
-      processedData.leaders = [{ name: "", tekx: "", position: "" }];
-
-      setFormData(processedData);
-    } catch (error) {
-      console.error("Error fetching project:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="flex flex-col items-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500 mb-3"></div>
-          <p className="text-gray-500">Loading project data...</p>
-        </div>
-      </div>
-    );
   }
 
   return (
-    <ProjectFormProvider initialData={formData} projectId={projectId}>
-      <ProjectFormContent />
-    </ProjectFormProvider>
-  );
-}
-
-function ProjectFormContent() {
-  const { currentStep, goToStep, totalSteps } = useProjectForm();
-
-  const steps = [
-    { title: "Basics", component: <Step1Basics /> },
-    { title: "Functional", component: <Step2Functional /> },
-    { title: "Technical", component: <Step3Technical /> },
-    { title: "Deliverables", component: <Step4Deliverables /> },
-    { title: "Releases", component: <Step5Releases /> },
-  ];
-
-  return (
-    <div className="space-y-6">
-      <Card className="p-4">
-        <Tabs
-          value={currentStep.toString()}
-          onValueChange={(value) => goToStep(Number.parseInt(value))}
-        >
-          <TabsList className="grid grid-cols-5 w-full">
+    <div className="max-w-4xl mx-auto space-y-8">
+      {/* Progress Indicator */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Project Form</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-between">
             {steps.map((step, index) => (
-              <TabsTrigger
-                key={index}
-                value={index.toString()}
-                disabled={index > currentStep}
-              >
-                {index + 1}. {step.title}
-              </TabsTrigger>
+              <div key={index} className="flex items-center">
+                <div className="flex flex-col items-center">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full border-2 mb-2">
+                    {index < currentStep ? (
+                      <CheckCircle className="h-5 w-5 text-purple-600" />
+                    ) : index === currentStep ? (
+                      <Circle className="h-5 w-5 text-purple-600 fill-current" />
+                    ) : (
+                      <Circle className="h-5 w-5 text-purple-400" />
+                    )}
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm font-medium">{step.title}</p>
+                    <p className="text-xs text-muted-foreground">{step.description}</p>
+                  </div>
+                </div>
+                {index < steps.length - 1 && <div className="w-16 h-px bg-gray-300 mx-4 mt-[-20px]" />}
+              </div>
             ))}
-          </TabsList>
-        </Tabs>
+          </div>
+          <div className="flex justify-center mt-4">
+            <Badge variant="outline" className="border-purple-300 text-purple-700">
+              Step {currentStep + 1} of {totalSteps}
+            </Badge>
+          </div>
+        </CardContent>
       </Card>
 
-      {steps[currentStep].component}
+      {/* Current Step */}
+      {renderStep()}
     </div>
-  );
+  )
 }
-
-import { useProjectForm } from "./form-context";

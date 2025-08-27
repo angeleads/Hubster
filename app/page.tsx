@@ -9,6 +9,7 @@ export default function HomePage() {
   const { user, profile, loading } = useAuth();
   const router = useRouter();
 
+
   useEffect(() => {
     if (!loading) {
       if (!user) {
@@ -20,12 +21,21 @@ export default function HomePage() {
   }, [user, loading, router]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin" />
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="text-center">
+        <Loader2 className="h-8 w-8 animate-spin mx-auto" />
+        <p className="mt-2">Loading...</p>
+        <button 
+          onClick={() => window.location.reload()} 
+          className="mt-4 text-purple-600 hover:underline"
+        >
+          Taking too long? Click to refresh
+        </button>
       </div>
-    );
-  }
+    </div>
+  )
+}
 
   return null;
 }

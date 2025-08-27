@@ -58,6 +58,7 @@ export function Step2Functional() {
                 onChange={(e) =>
                   handleFunctionalPurposeChange(index, e.target.value)
                 }
+                className="border-2 border-purple-200 focus:border-purple-400"
                 placeholder={`As a XXX, I want to XXX`}
                 required
               />
@@ -78,7 +79,7 @@ export function Step2Functional() {
             type="button"
             variant="outline"
             onClick={handleAddFunctionalPurpose}
-            className="w-full"
+            className="w-full bg-purple-50 hover:bg-purple-100 text-purple-700 hover:text-purple-800"
           >
             <PlusCircle className="h-4 w-4 mr-2" />
             Add Another Purpose
@@ -90,7 +91,12 @@ export function Step2Functional() {
         <Button type="button" variant="outline" onClick={goToPreviousStep}>
           Previous Step
         </Button>
-        <Button type="submit"  className="bg-purple-300 text-purple-600 hover:bg-purple-400 hover:text-purple-800">Next Step</Button>
+        <Button
+          type="submit"
+          className="bg-purple-300 text-purple-600 hover:bg-purple-400 hover:text-purple-800"
+        >
+          Next Step
+        </Button>
       </div>
     </form>
   );

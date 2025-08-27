@@ -11,7 +11,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { StatusBadge } from "@/components/ui/status-badge";
 
 export default function Navbar() {
   const { user, profile, signOut } = useAuth();
@@ -33,18 +32,17 @@ export default function Navbar() {
     .toUpperCase();
 
   return (
-    <nav className="border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+    <nav className="bg-neutral-800 backdrop-blur">
+      <div className="max-w-full px-4">
+        <div className="flex items-center justify-between h-20">
           <div className="flex items-center space-x-4">
-            <h1 className="text-xl font-bold text-purple-600">Hubster</h1>
+            <img src="/hubicito-logo.png" alt="Hubicito Logo" className="h-64 w-h-64 mr-12"/>
             <div className="hidden sm:block">
-              <StatusBadge
-                status={profile.role}
-                size="sm"
-                showIcon={false}
-                className="bg-purple-100 text-purple-800 border-purple-200"
-              />
+              <div className="rounded-lg bg-purple-100 text-purple-800 border-purple-200">
+                <div className="text-sm m-2 font-bold">
+                  {profile.role}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -77,21 +75,6 @@ export default function Navbar() {
                   )}
                 </div>
               </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => router.push("/dashboard/profile")}
-                className="hover:bg-purple-200 hover:text-purple-600"
-              >
-                <User className="mr-2 h-4 w-4" />
-                <span>Profile</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => router.push("/dashboard/settings")}
-                className="hover:bg-purple-200 hover:text-purple-600"
-              >
-                <Settings className="mr-2 h-4 w-4" />
-                <span>Settings</span>
-              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={handleSignOut}

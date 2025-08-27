@@ -36,18 +36,19 @@ export default function DashboardLayout({
   }
 
   const isAdmin = profile.role === "admin";
+  const isSuperAdmin = profile.role === "super_admin"
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-purple-50">
       <Navbar />
 
       <div className="flex h-[calc(100vh-4rem)]">
         {/* Sidebar */}
-        <div className="w-64 bg-white border-r border-gray-200 hidden md:block">
+        <div className="w-64 bg-zinc-800 border-r border-gray-200 hidden md:block">
           <div className="h-full flex flex-col">
             <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
               <div className="flex items-center flex-shrink-0 px-4 mb-6">
-                <h2 className="text-lg font-semibold text-gray-900">
+                <h2 className="text-lg font-semibold text-gray-100">
                   {isAdmin ? "Astek Panel" : "My Dashboard"}
                 </h2>
               </div>
