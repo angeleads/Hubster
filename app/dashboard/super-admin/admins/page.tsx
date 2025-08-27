@@ -31,7 +31,7 @@ type AdminUser = {
   id: string
   email: string
   full_name: string
-  role: "student" | "admin" | "super_admin"
+  role: "admin" | "super_admin"
   tekx_position: string | null
   created_at: string
   updated_at: string

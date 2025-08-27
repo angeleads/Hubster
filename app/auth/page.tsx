@@ -88,7 +88,7 @@ export default function AuthPage() {
             <GraduationCap className="h-8 w-8 text-purple-600" />
           </div>
           <h2 className="text-3xl font-bold text-gray-900">
-            Welcome to Hubster
+            Welcome to Hubicito
           </h2>
           <p className="mt-2 text-gray-600">
             Your student project management platform

@@ -462,7 +462,7 @@ export default function ProjectDetailPage() {
             <Button
               onClick={() => updateProjectStatus("completed")}
               disabled={isUpdatingStatus}
-              className="bg-green-600 hover:bg-green-700"
+              className="bg-green-300 text-green-800 hover:bg-green-300 hover:text-green-900"
             >
               <CheckCircle className="h-4 w-4 mr-2" />
               Mark Completed

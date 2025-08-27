@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import SidebarAdmin from "@/components/dashboard/sidebar/sidebar-admin";
+import SidebarSuperAdmin from "@/components/dashboard/sidebar/sidebar-super-admin";
 import SidebarStudent from "@/components/dashboard/sidebar/sidebar-student";
 import Navbar from "@/components/layout/navbar";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
@@ -49,11 +50,15 @@ export default function DashboardLayout({
             <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
               <div className="flex items-center flex-shrink-0 px-4 mb-6">
                 <h2 className="text-lg font-semibold text-gray-100">
-                  {isAdmin ? "Astek Panel" : "My Dashboard"}
+                  {isAdmin ? "Astek Panel" : "My Dashboard" }
                 </h2>
               </div>
               <nav className="mt-5 flex-1 px-2 space-y-1">
-                {isAdmin ? <SidebarAdmin /> : <SidebarStudent />}
+                {isSuperAdmin ? (
+                  <SidebarSuperAdmin />
+                ) : isAdmin ? (
+                  <SidebarAdmin />
+                ) : (<SidebarStudent />)}
               </nav>
             </div>
           </div>

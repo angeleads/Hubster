@@ -185,7 +185,7 @@ export function Step4Deliverables() {
             type="button"
             variant="outline"
             onClick={handleAddDeliverable}
-            className="w-full bg-transparen bg-purple-50 hover:bg-purple-100 text-purple-700 hover:text-purple-800t"
+            className="w-full bg-transparen bg-purple-50 hover:bg-purple-100 text-purple-700 hover:text-purple-800"
           >
             <PlusCircle className="h-4 w-4 mr-2" />
             Add Another Deliverable

@@ -171,6 +171,7 @@ export function Step5Releases() {
                             e.target.value
                           )
                         }
+                        className="border-2 border-purple-200 focus:border-purple-400"
                         placeholder="e.g., Task 1 done"
                         required
                       />
@@ -193,7 +194,8 @@ export function Step5Releases() {
                   type="button"
                   variant="outline"
                   onClick={() => handleAddFeature(releaseIndex)}
-                  className="w-full mt-2"
+                  
+                  className=" mt-2 w-full bg-transparen bg-purple-50 hover:bg-purple-100 text-purple-700 hover:text-purple-800"
                 >
                   <PlusCircle className="h-4 w-4 mr-2" />
                   Add Feature
@@ -219,6 +221,7 @@ export function Step5Releases() {
               value={formData.description}
               onChange={(e) => updateFormData({ description: e.target.value })}
               placeholder="Provide a brief description of your project"
+              className="border-2 border-purple-200 focus:border-purple-400"
               rows={3}
             />
           </div>
@@ -230,6 +233,8 @@ export function Step5Releases() {
               value={formData.videoUrl}
               onChange={(e) => updateFormData({ videoUrl: e.target.value })}
               placeholder="e.g., https://youtube.com/watch?v=..."
+              className="border-2 border-purple-200 focus:border-purple-400"
+
             />
           </div>
 
@@ -243,6 +248,7 @@ export function Step5Releases() {
               onChange={(e) =>
                 updateFormData({ projectFolderUrl: e.target.value })
               }
+              className="border-2 border-purple-200 focus:border-purple-400"
               placeholder="e.g., https://github.com/username/project"
             />
           </div>
@@ -259,10 +265,11 @@ export function Step5Releases() {
             variant="outline"
             onClick={handleSaveAsDraft}
             disabled={isSaving || isSubmitting}
+            className="bg-purple-100 hover:bg-purple-200 text-purple-700 hover:text-purple-800 border-2 border-purple-200"
           >
             {isSaving ? (
               <>
-                <div className="animate-spin h-4 w-4 mr-2 border-2 border-b-transparent rounded-full"></div>
+                <div className="animate-spin h-4 w-4 mr-2 border-2 border-b-transparent rounded-full "></div>
                 Saving...
               </>
             ) : (
@@ -272,7 +279,7 @@ export function Step5Releases() {
               </>
             )}
           </Button>
-          <Button type="submit" disabled={isSaving || isSubmitting}>
+          <Button type="submit" disabled={isSaving || isSubmitting} className="bg-purple-300 text-purple-600 hover:bg-purple-400 hover:text-purple-800">
             {isSubmitting ? (
               <>
                 <div className="animate-spin h-4 w-4 mr-2 border-2 border-b-transparent rounded-full"></div>

@@ -224,7 +224,7 @@ export default function NewPresentationPage() {
               <Button type="button" variant="outline" onClick={() => router.back()}>
                 Cancel
               </Button>
-              <Button type="submit" disabled={isSubmitting}>
+              <Button type="submit" disabled={isSubmitting} className="bg-purple-600 text-white hover:bg-purple-700 hover:text-white">
                 {isSubmitting ? "Scheduling..." : "Schedule Presentation"}
               </Button>
             </div>
