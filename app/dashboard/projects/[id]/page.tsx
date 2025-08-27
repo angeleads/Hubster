@@ -321,9 +321,9 @@ export default function ProjectDetailPage() {
 
                 {/* Summary */}
                 <Card className="bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200">
-                  <CardContent className="pt-4">
+                  <CardContent className="pt-6">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center">
+                      <div className="flex items-center ">
                         <Award className="h-5 w-5 mr-2 text-purple-600" />
                         <span className="font-semibold text-purple-700">
                           Total Project Scope
@@ -452,17 +452,17 @@ export default function ProjectDetailPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
-              <Badge variant="outline" className="mr-2">
+              Project Validation
+              <Badge variant="outline" className="ml-2">
                 Admin
               </Badge>
-              Project Validation
             </CardTitle>
           </CardHeader>
           <CardContent>
             <Button
               onClick={() => updateProjectStatus("completed")}
               disabled={isUpdatingStatus}
-              className="bg-green-300 text-green-800 hover:bg-green-300 hover:text-green-900"
+              className=" text-gray-800 hover:bg-green-300 hover:text-green-900 border-2 border-gray-300 bg-gray-200 hover:border-green-300"
             >
               <CheckCircle className="h-4 w-4 mr-2" />
               Mark Completed

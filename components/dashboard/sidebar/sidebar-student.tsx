@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -6,7 +8,8 @@ import {
   Presentation,
   Puzzle,
   FileText,
-  FolderPlus
+  FolderPlus,
+  Menu,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -14,19 +17,31 @@ const navigation = [
   { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
   { name: "My Projects", href: "/dashboard/my-projects", icon: FileText },
   { name: "New Project", href: "/dashboard/new-project", icon: FolderPlus },
-  {
-    name: "My Presentations",
-    href: "/dashboard/presentations",
-    icon: Presentation,
-  },
+  { name: "My Presentations", href: "/dashboard/presentations", icon: Presentation },
   { name: "What is Hub?", href: "/what-is-hub", icon: Puzzle },
 ];
 
-export default function SidebarStudent() {
+export default function SidebarStudent({
+  collapsed,
+  setCollapsed,
+}: {
+  collapsed: boolean;
+  setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const pathname = usePathname();
 
   return (
-    <div className="space-y-1">
+    <div className="flex flex-col space-y-1">
+      {/* Bouton toggle */}
+      <Button
+        variant="ghost"
+        onClick={() => setCollapsed(!collapsed)}
+        className="mb-4 justify-center"
+        aria-label={collapsed ? "Développer la sidebar" : "Réduire la sidebar"}
+      >
+        <Menu className="h-5 w-5" />
+      </Button>
+
       {navigation.map((item) => {
         const isActive =
           pathname === item.href ||
@@ -43,8 +58,8 @@ export default function SidebarStudent() {
                   : "text-gray-100 hover:bg-purple-50 hover:text-gray-800"
               )}
             >
-              <item.icon className="h-4 w-4 mr-3" />
-              {item.name}
+              <item.icon className={cn("h-4 w-4", !collapsed && "mr-3")} />
+              {!collapsed && item.name}
             </Button>
           </Link>
         );

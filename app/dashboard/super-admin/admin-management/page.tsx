@@ -165,12 +165,6 @@ export default function AdminManagementPage() {
           <h1 className="text-3xl font-bold">Admin Management</h1>
           <p className="text-muted-foreground">Manage administrator accounts and permissions</p>
         </div>
-        <Link href="/dashboard/super-admin/admin-management/new">
-          <Button className="bg-purple-200 hover:bg-purple-300 text-purple-900">
-            <Plus className="h-4 w-4 mr-2" />
-            Create Admin
-          </Button>
-        </Link>
       </div>
 
       {/* Statistics Cards */}

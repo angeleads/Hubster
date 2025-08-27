@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -6,25 +8,38 @@ import {
   Presentation,
   LayoutDashboard,
   BookUser,
+  Menu,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navigation = [
   { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
   { name: "All Projects", href: "/dashboard/admin/projects", icon: FolderOpen },
-  {
-    name: "Presentations",
-    href: "/dashboard/admin/presentations",
-    icon: Presentation,
-  },
+  { name: "Presentations", href: "/dashboard/admin/presentations", icon: Presentation },
   { name: "Student Management", href: "/dashboard/admin/student-management", icon: BookUser },
 ];
 
-export default function SidebarAdmin() {
+export default function SidebarAdmin({
+  collapsed,
+  setCollapsed,
+}: {
+  collapsed: boolean;
+  setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const pathname = usePathname();
 
   return (
-    <div className="space-y-1">
+    <div className="flex flex-col space-y-1">
+      {/* Bouton toggle */}
+      <Button
+        variant="ghost"
+        onClick={() => setCollapsed(!collapsed)}
+        className="mb-4 justify-center"
+        aria-label={collapsed ? "Développer la sidebar" : "Réduire la sidebar"}
+      >
+        <Menu className="h-5 w-5" />
+      </Button>
+
       {navigation.map((item) => {
         const isActive =
           pathname === item.href ||
@@ -41,8 +56,8 @@ export default function SidebarAdmin() {
                   : "text-gray-100 hover:bg-purple-50 hover:text-gray-800"
               )}
             >
-              <item.icon className="h-4 w-4 mr-3" />
-              {item.name}
+              <item.icon className={cn("h-4 w-4", !collapsed && "mr-3")} />
+              {!collapsed && item.name}
             </Button>
           </Link>
         );

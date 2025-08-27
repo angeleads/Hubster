@@ -3,7 +3,7 @@
 import type React from "react";
 import { useAuth } from "@/contexts/auth-context";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import SidebarAdmin from "@/components/dashboard/sidebar/sidebar-admin";
 import SidebarSuperAdmin from "@/components/dashboard/sidebar/sidebar-super-admin";
 import SidebarStudent from "@/components/dashboard/sidebar/sidebar-student";
@@ -17,6 +17,9 @@ export default function DashboardLayout({
 }) {
   const { user, profile, loading } = useAuth();
   const router = useRouter();
+
+  // État partagé pour sidebar réduite ou non
+  const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -37,7 +40,7 @@ export default function DashboardLayout({
   }
 
   const isAdmin = profile.role === "admin";
-  const isSuperAdmin = profile.role === "super_admin"
+  const isSuperAdmin = profile.role === "super_admin";
 
   return (
     <div className="min-h-screen bg-purple-50">
@@ -45,23 +48,26 @@ export default function DashboardLayout({
 
       <div className="flex h-[calc(100vh-4rem)]">
         {/* Sidebar */}
-        <div className="w-64 bg-zinc-800 border-r border-gray-200 hidden md:block">
-          <div className="h-full flex flex-col">
-            <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-              <div className="flex items-center flex-shrink-0 px-4 mb-6">
-                <h2 className="text-lg font-semibold text-gray-100">
-                  {isAdmin ? "Astek Panel" : "My Dashboard" }
-                </h2>
-              </div>
-              <nav className="mt-5 flex-1 px-2 space-y-1">
-                {isSuperAdmin ? (
-                  <SidebarSuperAdmin />
-                ) : isAdmin ? (
-                  <SidebarAdmin />
-                ) : (<SidebarStudent />)}
-              </nav>
-            </div>
-          </div>
+        <div
+          className={`bg-zinc-800 border-r border-gray-200 hidden md:flex flex-col ${
+            collapsed ? "w-16" : "w-64"
+          } transition-width duration-300 ease-in-out`}
+        >
+          <nav className="flex-1 overflow-y-auto px-2 py-4 space-y-1">
+            {isSuperAdmin ? (
+              <SidebarSuperAdmin
+                collapsed={collapsed}
+                setCollapsed={setCollapsed}
+              />
+            ) : isAdmin ? (
+              <SidebarAdmin collapsed={collapsed} setCollapsed={setCollapsed} />
+            ) : (
+              <SidebarStudent
+                collapsed={collapsed}
+                setCollapsed={setCollapsed}
+              />
+            )}
+          </nav>
         </div>
 
         {/* Main content */}

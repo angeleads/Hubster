@@ -158,7 +158,6 @@ export default function AdminProjectsPage() {
       >
         <div className="flex items-center">
           <StatusBadge status="submitted" />
-          <span className="ml-2">Submitted</span>
         </div>
       </DropdownMenuCheckboxItem>
       <DropdownMenuCheckboxItem
@@ -167,7 +166,6 @@ export default function AdminProjectsPage() {
       >
         <div className="flex items-center">
           <StatusBadge status="approved" />
-          <span className="ml-2">Approved</span>
         </div>
       </DropdownMenuCheckboxItem>
       <DropdownMenuCheckboxItem
@@ -176,7 +174,6 @@ export default function AdminProjectsPage() {
       >
         <div className="flex items-center">
           <StatusBadge status="rejected" />
-          <span className="ml-2">Rejected</span>
         </div>
       </DropdownMenuCheckboxItem>
       <DropdownMenuCheckboxItem
@@ -185,7 +182,6 @@ export default function AdminProjectsPage() {
       >
         <div className="flex items-center">
           <StatusBadge status="draft" />
-          <span className="ml-2">Draft</span>
         </div>
       </DropdownMenuCheckboxItem>
     </>
