@@ -5,6 +5,7 @@ import {
   FolderOpen,
   Presentation,
   LayoutDashboard,
+  BookUser,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -16,6 +17,7 @@ const navigation = [
     href: "/dashboard/admin/presentations",
     icon: Presentation,
   },
+  { name: "Student Management", href: "/dashboard/admin/student-management", icon: BookUser },
 ];
 
 export default function SidebarAdmin() {
