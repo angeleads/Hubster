@@ -306,13 +306,15 @@ export default function ProjectDetailPage() {
                           </p>
                         </div>
                         <div className="ml-4 text-right">
-                          <Badge
-                            variant="outline"
-                            className="bg-purple-50 text-purple-700 border-purple-200"
-                          >
-                            <Clock className="h-3 w-3 mr-1" />
-                            {deliverable.days} days
-                          </Badge>
+                          {(isAdmin || isOwner) && (
+                            <Badge
+                              variant="outline"
+                              className="bg-purple-50 text-purple-700 border-purple-200"
+                            >
+                              <Clock className="h-3 w-3 mr-1" />
+                              {deliverable.days} days
+                            </Badge>
+                          )}
                         </div>
                       </div>
                     </CardContent>
