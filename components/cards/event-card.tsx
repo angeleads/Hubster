@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Calendar, Clock, MapPin, User } from "lucide-react"
+import { Calendar, Clock, Eye, MapPin, User } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { supabase } from "@/lib/supabase"
@@ -64,7 +64,7 @@ export function EventCard({ event }: EventProps) {
   }
 
   return (
-    <Card className="overflow-hidden hover:shadow-md transition-shadow">
+    <Card className="overflow-hidden">
       <CardContent className="p-0">
         <div className="p-4">
           <div className="flex justify-between items-start mb-2">
@@ -90,10 +90,11 @@ export function EventCard({ event }: EventProps) {
             )}
           </div>
         </div>
-        <div className="border-t p-3 bg-gray-50 flex justify-end">
+        <div className="border-t p-3 bg-purple-50 flex justify-end">
           <Link href={`/dashboard/presentations/${event.id}`}>
-            <Button variant="outline" size="sm">
-              View Details
+            <Button variant="outline" size="sm" c>
+              <Eye className="h-4 w-4" />
+              View
             </Button>
           </Link>
         </div>

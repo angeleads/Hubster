@@ -282,7 +282,7 @@ export default function DashboardPage() {
       {/* Recent Projects */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Recent Approved Projects</CardTitle>
+          <CardTitle>Recent Projects</CardTitle>
           <Link
             href={
               isAdmin ? "/dashboard/admin/projects" : "/dashboard/my-projects"
