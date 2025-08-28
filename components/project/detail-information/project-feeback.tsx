@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Send, Lock } from "lucide-react"
+import { Send, Lock, BadgeAlert } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
 interface Feedback {
@@ -176,6 +176,10 @@ export function ProjectFeedback({ projectId, projectOwnerId }: ProjectFeedbackPr
       <CardHeader>
         <CardTitle>Project Feedback</CardTitle>
         <CardDescription>Share your thoughts and suggestions about this project</CardDescription>
+        <CardDescription className="mt-2 text-sm w-1/2 text-yellow-600 bg-yellow-100 p-2 rounded-xl">
+          <BadgeAlert className="h-4 w-4 inline-block mr-2" />
+          Feedback is private and only visible to you and the Hub manager.
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Existing Feedback */}

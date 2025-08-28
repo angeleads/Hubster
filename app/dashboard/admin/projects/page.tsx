@@ -78,7 +78,7 @@ export default function AdminProjectsPage() {
         throw error;
       }
 
-      console.log("Fetched projects:", data); // Debug log
+      console.log("Fetched projects:", data);
       setProjects(data || []);
     } catch (error: any) {
       console.error("Error fetching projects:", error);
@@ -166,6 +166,22 @@ export default function AdminProjectsPage() {
       >
         <div className="flex items-center">
           <StatusBadge status="approved" />
+        </div>
+      </DropdownMenuCheckboxItem>
+      <DropdownMenuCheckboxItem
+        checked={statusFilter.includes("in_progress")}
+        onCheckedChange={() => handleStatusFilterChange("in_progress")}
+      >
+        <div className="flex items-center">
+          <StatusBadge status="in_progress" />
+        </div>
+      </DropdownMenuCheckboxItem>
+       <DropdownMenuCheckboxItem
+        checked={statusFilter.includes("completed")}
+        onCheckedChange={() => handleStatusFilterChange("completed")}
+      >
+        <div className="flex items-center">
+          <StatusBadge status="completed" />
         </div>
       </DropdownMenuCheckboxItem>
       <DropdownMenuCheckboxItem

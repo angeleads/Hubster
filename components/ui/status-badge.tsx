@@ -44,7 +44,7 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
         return {
           label: "In Progress",
           variant: "default" as const,
-          className: "bg-yellow-100 text-yellow-700 hover:bg-yellow-200",
+          className: "bg-blue-100 text-blue-700 hover:bg-blue-200",
         };
       case "completed":
         return {

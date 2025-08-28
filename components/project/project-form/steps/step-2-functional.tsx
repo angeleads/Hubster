@@ -1,10 +1,12 @@
 "use client";
 
 import type React from "react";
+import { useState } from "react";
 
 import { useProjectForm } from "../form-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Card,
   CardContent,
@@ -12,11 +14,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { PlusCircle, Trash2 } from "lucide-react";
+import { PlusCircle, Trash2, Info } from "lucide-react";
 
 export function Step2Functional() {
   const { formData, updateFormData, goToNextStep, goToPreviousStep } =
     useProjectForm();
+  const [showHint, setShowHint] = useState(false);
 
   const handleAddFunctionalPurpose = () => {
     updateFormData({
@@ -45,10 +48,34 @@ export function Step2Functional() {
     <form onSubmit={handleSubmit} className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Functional Purpose</CardTitle>
+          <div className="flex justify-between items-center">
+            <CardTitle>Functional Purpose</CardTitle>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={() => setShowHint(!showHint)}
+              className="bg-purple-50 hover:bg-purple-100 text-purple-700 hover:text-purple-800"
+            >
+              <Info className="h-5 w-5" />
+            </Button>
+          </div>
           <CardDescription>
             Describe what your project aims to accomplish
           </CardDescription>
+          {showHint && (
+            <Alert className="mt-2 bg-purple-50 border-purple-200 text-purple-800">
+              <AlertDescription>
+                Use user stories to describe the functionalities. A user story
+                is a short, simple description of a feature told from the
+                perspective of the person who desires the new capability,
+                usually a user or customer of the system.
+                <br />
+                <strong>Example:</strong> "As a [type of user], I want to [an
+                action] so that [a benefit]."
+              </AlertDescription>
+            </Alert>
+          )}
         </CardHeader>
         <CardContent className="space-y-4">
           {formData.functionalPurpose.map((purpose, index) => (

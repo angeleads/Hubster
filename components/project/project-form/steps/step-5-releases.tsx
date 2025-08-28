@@ -1,12 +1,14 @@
 "use client";
 
 import type React from "react";
+import { useState, useEffect } from "react";
 
 import { useProjectForm } from "../form-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Card,
   CardContent,
@@ -14,10 +16,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { PlusCircle, Trash2, Save, Send } from "lucide-react";
+import { PlusCircle, Trash2, Save, Send, Info } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export function Step5Releases() {
   const {
@@ -30,6 +31,7 @@ export function Step5Releases() {
     isSubmitting,
   } = useProjectForm();
   const { toast } = useToast();
+  const [showHint, setShowHint] = useState(false);
   const router = useRouter();
 
   // Ensure releases is always an array
@@ -137,10 +139,44 @@ export function Step5Releases() {
     <form onSubmit={handleSubmit} className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Project Releases</CardTitle>
+          <div className="flex justify-between items-center">
+            <CardTitle>Project Releases</CardTitle>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={() => setShowHint(!showHint)}
+              className="bg-purple-50 hover:bg-purple-100 text-purple-700 hover:text-purple-800"
+            >
+              <Info className="h-5 w-5" />
+            </Button>
+          </div>
           <CardDescription>
             Break down your project into releases (25%, 50%, 75%, 100%)
           </CardDescription>
+          {showHint && (
+            <Alert className="mt-2 bg-purple-50 border-purple-200 text-purple-800">
+              <AlertDescription>
+                Project releases help you plan and track your progress. Divide
+                your project into four major milestones, each representing a
+                percentage of completion.
+                <br />
+                <strong>Release 1.0 (25%):</strong> What will be done when the
+                project is a quarter of the way complete? (e.g., "Basic UI and
+                user registration").
+                <br />
+                <strong>Release 2.0 (50%):</strong> What features will be
+                available at the halfway point? (e.g., "Core functionality
+                implemented").
+                <br />
+                <strong>Release 3.0 (75%):</strong> What will be added as you
+                near completion? (e.g., "Advanced features and testing").
+                <br />
+                <strong>Release 4.0 (100%):</strong> What does the final,
+                completed project look like? (e.g., "Deployment and final polish").
+              </AlertDescription>
+            </Alert>
+          )}
         </CardHeader>
         <CardContent className="space-y-6">
           {releases.map((release, releaseIndex) => (

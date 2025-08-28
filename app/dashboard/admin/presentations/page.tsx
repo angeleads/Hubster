@@ -13,10 +13,6 @@ import { ErrorMessage } from "@/components/ui/error-message";
 import { EmptyState } from "@/components/ui/empty-state";
 import { SearchAndFilter } from "@/components/utils/search-and-filter";
 import { useToast } from "@/hooks/use-toast";
-import {
-  exportEventsToExcel,
-  type EventExportData,
-} from "@/utils/export-ultils";
 import { ArrowLeft, Calendar, Download, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import {
@@ -114,42 +110,6 @@ export default function AdminPresentationsPage() {
         description: "Failed to mark presentation as completed",
         variant: "destructive",
       });
-    }
-  };
-
-  const handleExport = async () => {
-    setExporting(true);
-    try {
-      const exportData: EventExportData[] = filteredEvents.map((event) => ({
-        id: event.id,
-        title: event.title,
-        description: event.description,
-        event_type: event.event_type,
-        start_date: event.start_date,
-        end_date: event.end_date,
-        location: event.location,
-        presenter_name: event.presenter_name,
-        status: event.status,
-        completed: event.completed,
-        created_at: event.created_at,
-        admin_feedback: event.admin_feedback,
-      }));
-
-      exportEventsToExcel(exportData, "admin_presentations");
-
-      toast({
-        title: "Export Successful",
-        description: "Presentations have been exported to Excel",
-      });
-    } catch (error) {
-      console.error("Error exporting presentations:", error);
-      toast({
-        title: "Export Failed",
-        description: "Failed to export presentations",
-        variant: "destructive",
-      });
-    } finally {
-      setExporting(false);
     }
   };
 
@@ -308,7 +268,6 @@ export default function AdminPresentationsPage() {
             <CardTitle>All Presentations ({events.length})</CardTitle>
             <div className="flex gap-2">
               <Button
-                onClick={handleExport}
                 disabled={exporting || events.length === 0}
                 variant="outline"
                 className="flex items-center gap-2 bg-transparent"

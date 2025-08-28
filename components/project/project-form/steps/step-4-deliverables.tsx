@@ -1,12 +1,14 @@
 "use client";
 
 import type React from "react";
+import { useState, useEffect } from "react";
 
 import { useProjectForm } from "../form-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Card,
   CardContent,
@@ -14,8 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { PlusCircle, Trash2, Calculator } from "lucide-react";
-import { useEffect } from "react";
+import { PlusCircle, Trash2, Calculator, Info, BadgeAlert } from "lucide-react";
 
 export function Step4Deliverables() {
   const {
@@ -25,6 +26,7 @@ export function Step4Deliverables() {
     goToPreviousStep,
     calculateCredits,
   } = useProjectForm();
+  const [showHint, setShowHint] = useState(false);
 
   // Ensure deliverables is always an array
   useEffect(() => {
@@ -104,10 +106,46 @@ export function Step4Deliverables() {
     <form onSubmit={handleSubmit} className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Deliverable Organization</CardTitle>
+          <div className="flex justify-between items-center">
+            <CardTitle>Deliverable Organization</CardTitle>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={() => setShowHint(!showHint)}
+              className="bg-purple-50 hover:bg-purple-100 text-purple-700 hover:text-purple-800"
+            >
+              <Info className="h-5 w-5" />
+            </Button>
+          </div>
           <CardDescription>
             Break down your project into specific deliverables
           </CardDescription>
+          {showHint && (
+            <Alert className="mt-2 bg-purple-50 border-purple-200 text-purple-800">
+              <AlertDescription>
+                <BadgeAlert className="h-4 w-4 inline-block mr-2" />
+                <strong>Make sure that each functionality is very well detailed.</strong>
+                <br />
+                <br />
+
+                A deliverable is a tangible or intangible good or service
+                produced as a result of a project. Break down your project into
+                smaller, manageable parts.
+                <br />
+
+                <strong>Functionality:</strong> A high-level description of the
+                feature (e.g., "Functionality 1: User Login").
+                <br />
+                <strong>Details:</strong> Specifics of what the functionality
+                includes (e.g., "- Implement email/password login and Google
+                OAuth").
+                <br />
+                <strong>Days to Develop:</strong> Your best estimate of the time
+                required for this part.
+              </AlertDescription>
+            </Alert>
+          )}
         </CardHeader>
         <CardContent className="space-y-4">
           {deliverables.map((deliverable, index) => (
