@@ -9,7 +9,8 @@ import {
   Puzzle,
   FileText,
   FolderPlus,
-  Menu,
+  ArrowLeft,
+  ArrowRight
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -17,7 +18,11 @@ const navigation = [
   { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
   { name: "My Projects", href: "/dashboard/my-projects", icon: FileText },
   { name: "New Project", href: "/dashboard/new-project", icon: FolderPlus },
-  { name: "My Presentations", href: "/dashboard/presentations", icon: Presentation },
+  {
+    name: "My Presentations",
+    href: "/dashboard/presentations",
+    icon: Presentation,
+  },
   { name: "What is Hub?", href: "/what-is-hub", icon: Puzzle },
 ];
 
@@ -32,14 +37,16 @@ export default function SidebarStudent({
 
   return (
     <div className="flex flex-col space-y-1">
-      {/* Bouton toggle */}
       <Button
-        variant="ghost"
         onClick={() => setCollapsed(!collapsed)}
-        className="mb-4 justify-center"
-        aria-label={collapsed ? "Développer la sidebar" : "Réduire la sidebar"}
+        className="mb-4 justify-end bg-transparent hover:bg-transparent"
+        aria-label={collapsed ? "Deploy the sidebar" : "Reduce the sidebar"}
       >
-        <Menu className="h-5 w-5" />
+        {collapsed ? (
+          <ArrowRight className="h-5 w-5 text-white" />
+        ) : (
+          <ArrowLeft className="h-5 w-5 text-white" />
+        )}
       </Button>
 
       {navigation.map((item) => {

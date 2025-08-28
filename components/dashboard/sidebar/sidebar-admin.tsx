@@ -8,15 +8,24 @@ import {
   Presentation,
   LayoutDashboard,
   BookUser,
-  Menu,
+  ArrowRight,
+  ArrowLeft
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navigation = [
   { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
   { name: "All Projects", href: "/dashboard/admin/projects", icon: FolderOpen },
-  { name: "Presentations", href: "/dashboard/admin/presentations", icon: Presentation },
-  { name: "Student Management", href: "/dashboard/admin/student-management", icon: BookUser },
+  {
+    name: "Presentations",
+    href: "/dashboard/admin/presentations",
+    icon: Presentation,
+  },
+  {
+    name: "Student Management",
+    href: "/dashboard/admin/student-management",
+    icon: BookUser,
+  },
 ];
 
 export default function SidebarAdmin({
@@ -32,12 +41,14 @@ export default function SidebarAdmin({
     <div className="flex flex-col space-y-1">
       {/* Bouton toggle */}
       <Button
-        variant="ghost"
         onClick={() => setCollapsed(!collapsed)}
-        className="mb-4 justify-center"
-        aria-label={collapsed ? "Développer la sidebar" : "Réduire la sidebar"}
+        className="mb-4 justify-end bg-transparent hover:bg-transparent"
+        aria-label={collapsed ? "Deploy the sidebar" : "Reduce the sidebar"}
       >
-        <Menu className="h-5 w-5" />
+        {collapsed ?
+          <ArrowRight className="h-5 w-5 text-white" />
+          : <ArrowLeft className="h-5 w-5 text-white" />
+        }
       </Button>
 
       {navigation.map((item) => {

@@ -8,7 +8,9 @@ import {
   Presentation,
   LayoutDashboard,
   BookUser,
-  Menu,
+  ArrowLeft,
+  ArrowRight,
+  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -22,30 +24,47 @@ const navigation = [
 export default function SidebarSuperAdmin({
   collapsed,
   setCollapsed,
+  onCloseMobileSidebar,
 }: {
   collapsed: boolean;
   setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+  onCloseMobileSidebar?: () => void;
 }) {
   const pathname = usePathname();
 
   return (
-    <div className="flex flex-col space-y-1">
-      {/* Bouton toggle en haut de la sidebar */}
+    <div className="flex flex-col space-y-4">
+      {/* Collapse/expand button desktop */}
       <Button
         onClick={() => setCollapsed(!collapsed)}
-        className="mb-4 justify-end bg-transparent hover:bg-transparent"
-        aria-label={collapsed ? "Développer la sidebar" : "Réduire la sidebar"}
+        className="mb-4 justify-end bg-transparent hover:bg-transparent hidden md:flex"
+        aria-label={collapsed ? "Deploy the sidebar" : "Reduce the sidebar"}
       >
-        <Menu className="h-5 w-5 text-white" />
+        {collapsed
+          ? <ArrowRight className="h-5 w-5 text-white" />
+          : <ArrowLeft className="h-5 w-5 text-white" />}
       </Button>
+      {/* Close mobile sidebar button */}
+      {onCloseMobileSidebar && (
+        <Button
+          onClick={onCloseMobileSidebar}
+          className="mb-4 justify-end bg-transparent hover:bg-transparent md:hidden"
+          aria-label="Close sidebar"
+        >
+          <X className="h-5 w-5 text-white" />
+        </Button>
+      )}
 
       {navigation.map((item) => {
         const isActive =
           pathname === item.href ||
           (item.href !== "/dashboard" && pathname.startsWith(item.href));
-
         return (
-          <Link key={item.name} href={item.href}>
+          <Link
+            key={item.name}
+            href={item.href}
+            onClick={onCloseMobileSidebar ? onCloseMobileSidebar : undefined}
+          >
             <Button
               variant="ghost"
               className={cn(
@@ -55,12 +74,7 @@ export default function SidebarSuperAdmin({
                   : "text-gray-100 hover:bg-purple-50 hover:text-gray-800"
               )}
             >
-              <item.icon
-                className={cn(
-                  "h-4 w-4",
-                  !collapsed && "mr-3"
-                )}
-              />
+              <item.icon className={cn("h-4 w-4", !collapsed && "mr-3")} />
               {!collapsed && item.name}
             </Button>
           </Link>

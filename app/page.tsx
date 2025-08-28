@@ -6,7 +6,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { Loader2 } from "lucide-react";
 
 export default function HomePage() {
-  const { user, profile, loading } = useAuth();
+  const { user, loading } = useAuth();
   const router = useRouter();
 
 
