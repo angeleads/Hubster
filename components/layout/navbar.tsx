@@ -37,9 +37,9 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-20">
           <div className="flex items-center space-x-4">
             <img
-              src="/hubicito-logo.png"
+              src="/hubecito-logo.png"
               alt="Hubicito Logo"
-              className="h-36 w-h-36 mr-2"
+              className="h-36 w-h-36 mr-5"
             />
           </div>
           <div className="flex items-center space-x-8">

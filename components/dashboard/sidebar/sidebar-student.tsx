@@ -19,7 +19,7 @@ const navigation = [
   { name: "My Projects", href: "/dashboard/my-projects", icon: FileText },
   { name: "New Project", href: "/dashboard/new-project", icon: FolderPlus },
   {
-    name: "My Presentations",
+    name: "Hub Sessions",
     href: "/dashboard/presentations",
     icon: Presentation,
   },
