@@ -92,7 +92,7 @@ export function EventCard({ event }: EventProps) {
         </div>
         <div className="border-t p-3 bg-purple-50 flex justify-end">
           <Link href={`/dashboard/presentations/${event.id}`}>
-            <Button variant="outline" size="sm" c>
+            <Button variant="outline" size="sm">
               <Eye className="h-4 w-4" />
               View
             </Button>
