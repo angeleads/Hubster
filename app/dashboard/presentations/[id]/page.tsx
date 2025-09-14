@@ -15,7 +15,7 @@ type Event = {
   id: string;
   title: string;
   description: string;
-  event_type: "talk" | "conference" | "workshop" | "user_group";
+  event_type: "talk" | "workshop" |  "conference" | "hackathon";
   start_date: string;
   end_date: string;
   location: string;
@@ -72,7 +72,6 @@ export default function PresentationDetailPage() {
     if (profile) {
       fetchEvent();
     }
-    // eslint-disable-next-line
   }, [profile, eventId]);
 
   const fetchEvent = async () => {
@@ -269,8 +268,8 @@ export default function PresentationDetailPage() {
         return "bg-purple-500/10 text-purple-400 border-purple-500/20";
       case "workshop":
         return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
-      case "user_group":
-        return "bg-amber-500/10 text-amber-400 border-amber-500/20";
+      case "hackathon":
+        return "bg-pink-500/10 text-pink-400 border-pink-500/20";
       default:
         return "bg-slate-500/10 text-slate-400 border-slate-500/20";
     }

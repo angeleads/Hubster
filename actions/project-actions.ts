@@ -13,7 +13,7 @@ export interface ProjectData {
   technical_requirements: string[]
   material: string
   resources: string[]
-  deliverables: any[] // Array of arrays: [title, details, days]
+  deliverables: any[]
   releases: any[]
   timeline_estimate: string
   credits: number
@@ -140,7 +140,7 @@ export async function updateProject(projectId: string, formData: any) {
       .from("projects")
       .update(projectData)
       .eq("id", projectId)
-      .eq("user_id", user.id) // Ensure user owns the project
+      .eq("user_id", user.id)
       .select()
       .single()
 
@@ -192,7 +192,7 @@ export async function submitProject(projectId: string, formData: any) {
       .from("projects")
       .update(projectData)
       .eq("id", projectId)
-      .eq("user_id", user.id) // Ensure user owns the project
+      .eq("user_id", user.id)
       .select()
       .single()
 

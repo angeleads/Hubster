@@ -59,8 +59,9 @@ export function PresentationEditForm({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="talk">Talk</SelectItem>
-                <SelectItem value="user_group">User Group</SelectItem>
-                {/* Add more types as needed */}
+                <SelectItem value="workshop">Workshop</SelectItem>
+                <SelectItem value="conference">Conference</SelectItem>
+                <SelectItem value="hackathon">Hackathon</SelectItem>
               </SelectContent>
             </Select>
           </div>

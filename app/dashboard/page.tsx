@@ -41,7 +41,7 @@ type Event = {
   id: string
   title: string
   description: string | null
-  event_type: "talk" | "user_group" | "workshop" | "conference"
+  event_type: "talk" | "workshop" | "conference" | "hackathon"
   status: string
   created_at: string
   start_date: string
@@ -65,8 +65,8 @@ type DashboardStats = {
 export default function DashboardPage() {
   const { profile } = useAuth();
   const [projects, setProjects] = useState<Project[]>([]);
-  const [talks, setTalks] = useState<Event[]>([]);
-  const [workshops, setWorkshops] = useState<Event[]>([]);
+  const [sessions, setSessions] = useState<Event[]>([]);
+  const [hackathons, setHackathons] = useState<Event[]>([]);
   const [stats, setStats] = useState<DashboardStats>({
     totalProjects: 0,
     approvedProjects: 0,
@@ -103,36 +103,36 @@ export default function DashboardPage() {
         setProjects(projectsData || []);
       }
 
-      // Fetch talks and conferences
-      const { data: talksData, error: talksError } = await supabase
+      // Fetch sessions (talks, conferences, workshops)
+      const { data: sessionData, error: sessionError } = await supabase
         .from("events")
         .select("*")
-        .in("event_type", ["talk", "conference"])
+        .in("event_type", ["talk", "conference", "workshop"])
         .in("status", ["approved", "completed", "in_progress"])
         .gte("start_date", new Date().toISOString())
         .order("start_date", { ascending: true })
         .limit(3);
 
-      if (talksError) {
-        console.error("Talks error:", talksError);
+      if (sessionError) {
+        console.error("Talks error:", sessionError);
       } else {
-        setTalks(talksData || []);
+        setSessions(sessionData || []);
       }
 
-      // Fetch workshops and user groups
-      const { data: workshopsData, error: workshopsError } = await supabase
+       // Fetch hackathons and user groups
+      const { data: hackathonsData, error: hackathonsError } = await supabase
         .from("events")
         .select("*")
-        .in("event_type", ["workshop", "user_group"])
+        .in("event_type", ["hackathon"])
         .in("status", ["approved", "completed", "in_progress"])
         .gte("start_date", new Date().toISOString())
         .order("start_date", { ascending: true })
         .limit(3);
 
-      if (workshopsError) {
-        console.error("Workshops error:", workshopsError);
+      if (hackathonsError) {
+        console.error("Hackathons error:", hackathonsError);
       } else {
-        setWorkshops(workshopsData || []);
+        setHackathons(hackathonsData || []);
       }
 
       // Fetch dashboard stats
@@ -316,17 +316,17 @@ export default function DashboardPage() {
             <EmptyState
               icon={<FileText className="h-12 w-12 text-gray-400" />}
               title="No approved projects yet"
-              description="CircleCheckBig back later for new projects from students"
+              description="Come back later for new projects from students"
             />
           )}
         </CardContent>
       </Card>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Upcoming Talks */}
+        {/* Upcoming Sessions */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>Upcoming Talks & Conferences</CardTitle>
+            <CardTitle>Upcoming Events</CardTitle>
             <Link href="/dashboard/presentations">
               <Button variant="outline" size="sm">
                 View All
@@ -334,20 +334,20 @@ export default function DashboardPage() {
             </Link>
           </CardHeader>
           <CardContent>
-            {talks.length > 0 ? (
+            {sessions.length > 0 ? (
               <div className="space-y-4">
-                {talks.map((event) => (
+                {sessions.map((event) => (
                   <EventCard key={event.id} event={event} />
                 ))}
               </div>
             ) : (
               <EmptyState
-                title="No upcoming talks"
-                description="CircleCheckBig back later for new events"
+                title="No upcoming event"
+                description="Come back later for new events"
                 action={
                   profile.role === "student"
                     ? {
-                        label: "Schedule a Talk",
+                        label: "Schedule an event",
                         onClick: () =>
                           (window.location.href =
                             "/dashboard/presentations/new"),
@@ -363,7 +363,7 @@ export default function DashboardPage() {
         {/* Upcoming Workshops */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>Upcoming Workshops</CardTitle>
+            <CardTitle>Upcoming Hackathons</CardTitle>
             <Link href="/dashboard/presentations">
               <Button variant="outline" size="sm">
                 View All
@@ -371,16 +371,16 @@ export default function DashboardPage() {
             </Link>
           </CardHeader>
           <CardContent>
-            {workshops.length > 0 ? (
+            {hackathons.length > 0 ? (
               <div className="space-y-4">
-                {workshops.map((event) => (
+                {hackathons.map((event) => (
                   <EventCard key={event.id} event={event} />
                 ))}
               </div>
             ) : (
               <EmptyState
-                title="No upcoming workshops"
-                description="back later   for new events"
+                title="No upcoming hackathons"
+                description="Come back later for new events"
                 action={
                   profile.role === "admin"
                     ? {

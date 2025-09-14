@@ -81,11 +81,12 @@ export default function MyProjectsPage() {
       </div>
 
       <Tabs defaultValue="all">
-        <TabsList>
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="all">All Projects</TabsTrigger>
           <TabsTrigger value="draft">Drafts</TabsTrigger>
           <TabsTrigger value="submitted">Submitted</TabsTrigger>
           <TabsTrigger value="approved">Approved</TabsTrigger>
+          <TabsTrigger value="completed">Completed</TabsTrigger>
         </TabsList>
 
         <TabsContent value="all" className="mt-6">
@@ -171,9 +172,9 @@ export default function MyProjectsPage() {
 
         <TabsContent value="approved" className="mt-6">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {projects.filter((project) => project.status === "approved").length > 0 ? (
+            {projects.filter((project) => project.status === "approved" || project.status === "in_progress").length > 0 ? (
               projects
-                .filter((project) => project.status === "approved")
+                .filter((project) => project.status === "approved" || project.status === "in_progress")
                 .map((project) => (
                   <ProjectCard
                     key={project.id}
@@ -190,6 +191,32 @@ export default function MyProjectsPage() {
             ) : (
               <div className="col-span-full">
                 <EmptyState title="No approved projects" description="You don't have any approved projects" />
+              </div>
+            )}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="completed" className="mt-6">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {projects.filter((project) => project.status === "completed").length > 0 ? (
+              projects
+                .filter((project) => project.status === "completed")
+                .map((project) => (
+                  <ProjectCard
+                    key={project.id}
+                    id={project.id}
+                    title={project.title}
+                    description={project.description}
+                    status={project.status}
+                    timelineEstimate={project.timeline_estimate}
+                    createdAt={project.created_at}
+                    submittedAt={project.submitted_at}
+                    likesCount={project.likes_count}
+                  />
+                ))
+            ) : (
+              <div className="col-span-full">
+                <EmptyState title="No approved projects" description="You don't have any completed projects" />
               </div>
             )}
           </div>

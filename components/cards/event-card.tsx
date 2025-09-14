@@ -11,7 +11,7 @@ type EventProps = {
     id: string
     title: string
     description: string | null
-    event_type: "talk" | "user_group" | "workshop" | "conference"
+    event_type: "talk" | "workshop" | "conference" | "hackathon"
     start_date: string
     end_date: string
     location: string | null
@@ -47,8 +47,8 @@ export function EventCard({ event }: EventProps) {
         return "bg-purple-100 text-purple-800"
       case "workshop":
         return "bg-green-100 text-green-800"
-      case "user_group":
-        return "bg-amber-100 text-amber-800"
+      case "hackathon":
+        return "bg-pink-100 text-pink-800"
       default:
         return "bg-gray-100 text-gray-800"
     }

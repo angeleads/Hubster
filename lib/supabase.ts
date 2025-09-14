@@ -139,7 +139,7 @@ export type Database = {
           presenter_id: string
           title: string
           description: string | null
-          event_type: "talk" | "user_group" | "workshop" | "conference"
+          event_type: "talk" | "workshop" | "conference" | "hackathon"
           status: "pending" | "approved" | "rejected" | "completed"
           preferred_date: string | null
           start_date: string
@@ -155,7 +155,7 @@ export type Database = {
           presenter_id: string
           title: string
           description?: string | null
-          event_type?: "talk" | "user_group" | "workshop" | "conference"
+          event_type?: "talk" | "workshop" | "conference" | "hackathon"
           status?: "pending" | "approved" | "rejected" | "completed"
           preferred_date?: string | null
           start_date?: string
@@ -167,7 +167,7 @@ export type Database = {
         Update: {
           title?: string
           description?: string | null
-          event_type?: "talk" | "user_group" | "workshop" | "conference"
+          event_type?: "talk" | "workshop" | "conference" | "hackathon"
           status?: "pending" | "approved" | "rejected" | "completed"
           preferred_date?: string | null
           start_date?: string

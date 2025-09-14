@@ -13,7 +13,7 @@ type Event = {
   id: string;
   title: string;
   description: string;
-  event_type: "talk" | "conference" | "workshop" | "user_group";
+  event_type: "talk" | "workshop" | "conference" | "hackathon";
   start_date: string;
   end_date: string;
   location: string;
@@ -57,7 +57,7 @@ export default function PresentationsPage() {
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">My Presentations</h2>
-          <p className="text-gray-600">Manage your talks and user groups</p>
+          <p className="text-gray-600">Manage your talks and workshops</p>
         </div>
         <Link href="/dashboard/presentations/new">
           <Button className="bg-purple-200 hover:bg-purple-300 text-purple-800">
@@ -67,13 +67,35 @@ export default function PresentationsPage() {
         </Link>
       </div>
 
-      <Tabs defaultValue="upcoming">
-        <TabsList className="grid w-full grid-cols-3">
+      <Tabs defaultValue="all">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="all">All sessions</TabsTrigger>
           <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
           <TabsTrigger value="pending">Pending Approval</TabsTrigger>
           <TabsTrigger value="past">Past and completed</TabsTrigger>
         </TabsList>
 
+        <TabsContent value="all" className="mt-6">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {myPresentations.length > 0 ? (
+              myPresentations.map((event) => (
+                <EventCard key={event.id} event={event} />
+              ))
+            ) : (
+              <div className="col-span-full text-center py-8">
+                <p className="text-gray-500 mb-4">
+                  You don't have any upcoming presentations
+                </p>
+                <Link href="/dashboard/presentations/new">
+                  <Button className="bg-purple-200 hover:bg-purple-300 text-purple-800">
+                    <Calendar className="h-4 w-4 mr-2" />
+                    Schedule a Presentation
+                  </Button>
+                </Link>
+              </div>
+            )}
+          </div>
+        </TabsContent>
         <TabsContent value="upcoming" className="mt-6">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {myPresentations

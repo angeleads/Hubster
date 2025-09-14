@@ -25,7 +25,7 @@ type Event = {
   id: string;
   title: string;
   description: string;
-  event_type: "talk" | "conference" | "workshop" | "user_group";
+  event_type: "talk" | "workshop" | "conference" | "hackathon";
   start_date: string;
   end_date: string;
   location: string;
@@ -85,31 +85,6 @@ export default function AdminPresentationsPage() {
       });
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleMarkCompleted = async (eventId: string) => {
-    try {
-      const { error } = await supabase
-        .from("events")
-        .update({ completed: true })
-        .eq("id", eventId);
-
-      if (error) throw error;
-
-      toast({
-        title: "Presentation Completed",
-        description: "Presentation has been marked as completed",
-      });
-
-      fetchEvents();
-    } catch (error) {
-      console.error("Error marking presentation as completed:", error);
-      toast({
-        title: "Error",
-        description: "Failed to mark presentation as completed",
-        variant: "destructive",
-      });
     }
   };
 
@@ -224,12 +199,6 @@ export default function AdminPresentationsPage() {
         <Badge className="bg-blue-100 text-blue-800">Talk</Badge>
       </DropdownMenuCheckboxItem>
       <DropdownMenuCheckboxItem
-        checked={typeFilter.includes("user_group")}
-        onCheckedChange={() => handleTypeFilterChange("user_group")}
-      >
-        <Badge className="bg-amber-100 text-amber-800">User Group</Badge>
-      </DropdownMenuCheckboxItem>
-      <DropdownMenuCheckboxItem
         checked={typeFilter.includes("workshop")}
         onCheckedChange={() => handleTypeFilterChange("workshop")}
       >
@@ -240,6 +209,12 @@ export default function AdminPresentationsPage() {
         onCheckedChange={() => handleTypeFilterChange("conference")}
       >
         <Badge className="bg-purple-100 text-purple-800">Conference</Badge>
+      </DropdownMenuCheckboxItem>
+      <DropdownMenuCheckboxItem
+        checked={typeFilter.includes("hackathon")}
+        onCheckedChange={() => handleTypeFilterChange("hackathon")}
+      >
+        <Badge className="bg-pink-100 text-pink-800">Hackathons</Badge>
       </DropdownMenuCheckboxItem>
     </>
   );
@@ -266,22 +241,6 @@ export default function AdminPresentationsPage() {
         <CardHeader className="pb-3">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <CardTitle>All Presentations ({events.length})</CardTitle>
-            <div className="flex gap-2">
-              <Button
-                disabled={exporting || events.length === 0}
-                variant="outline"
-                className="flex items-center gap-2 bg-transparent"
-              >
-                <Download className="h-4 w-4" />
-                {exporting ? "Exporting..." : "Export Excel"}
-              </Button>
-              <SearchAndFilter
-                searchValue={searchQuery}
-                onSearchChange={setSearchQuery}
-                searchPlaceholder="Search presentations..."
-                filterContent={filterContent}
-              />
-            </div>
           </div>
         </CardHeader>
         <CardContent>
