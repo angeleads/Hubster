@@ -128,8 +128,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signUp = async (email: string, password: string, fullName: string, tekxPosition?: string) => {
     try {
-      const validTekxPositions = ["Tek1", "Tek2", "Tek3", "Tek4", "Tek5"]
-      const validatedTekxPosition = tekxPosition && validTekxPositions.includes(tekxPosition) ? tekxPosition : null
+      const validTekxPositions = ["Tek1", "Tek2", "Tek3", "Tek4", "Tek5"];
+      const validatedTekxPosition =
+        tekxPosition && validTekxPositions.includes(tekxPosition) ? tekxPosition : null;
 
       const { data, error } = await supabase.auth.signUp({
         email,

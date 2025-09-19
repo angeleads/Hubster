@@ -115,9 +115,9 @@ export function Step5Releases() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Submitting Step5 with:", {
-      releases: formData.releases,
-    });
+    // console.log("Submitting Step5 with:", {
+    //   releases: formData.releases,
+    // });
     try {
       await submitProject();
       toast({

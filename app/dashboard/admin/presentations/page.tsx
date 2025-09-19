@@ -11,9 +11,8 @@ import { PresentationCardAdmin } from "@/components/cards/presentation-card-admi
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { ErrorMessage } from "@/components/ui/error-message";
 import { EmptyState } from "@/components/ui/empty-state";
-import { SearchAndFilter } from "@/components/utils/search-and-filter";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Calendar, Download, CheckCircle } from "lucide-react";
+import { ArrowLeft, Calendar } from "lucide-react";
 import Link from "next/link";
 import {
   DropdownMenuLabel,
@@ -65,14 +64,24 @@ export default function AdminPresentationsPage() {
     setError(null);
 
     try {
-      const { data, error } = await supabase
+      const { data: rawData, error } = await supabase
         .from("events")
-        .select("*")
+        .select("*, presenter:presenter_id(full_name)")
         .order("start_date", { ascending: true });
 
       if (error) {
         throw error;
       }
+
+      const data = rawData.map((event: any) => ({
+        ...event,
+        presenter_name:
+          typeof event.presenter === "object" &&
+          event.presenter !== null &&
+          "full_name" in event.presenter
+            ? event.presenter.full_name
+            : "N/A",
+      }));
 
       setEvents(data || []);
     } catch (error: any) {

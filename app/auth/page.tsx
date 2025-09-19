@@ -66,6 +66,12 @@ export default function AuthPage() {
     const password = formData.get("password") as string;
     const fullName = formData.get("fullName") as string;
 
+    if (!email.endsWith("@epitech.eu")) {
+      setError("Make sure to use your Epitech email to sign up");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       await signUp(email, password, fullName, tekxPosition || undefined);
       setSuccess(
@@ -91,7 +97,7 @@ export default function AuthPage() {
             Welcome to Hubecito
           </h2>
           <p className="mt-2 text-gray-600">
-            Your student project management platform
+            The future of Hub management is here
           </p>
         </div>
 
@@ -114,7 +120,7 @@ export default function AuthPage() {
 
           {success && (
             <Alert
-              className="p-4 mb-6 bg-green-200 border border-green-400 text-green-700  rounded"
+              className="p-4 mb-6 bg-green-200 border border-green-400 text-green-700 px-4 py-3 rounded relative"
               variant="destructive"
             >
               <AlertDescription>{success}</AlertDescription>
@@ -136,7 +142,7 @@ export default function AuthPage() {
                       name="email"
                       type="email"
                       required
-                      placeholder="Enter your email"
+                      placeholder="Enter your Epitech email"
                       autoComplete="email"
                     />
                   </div>
@@ -173,7 +179,7 @@ export default function AuthPage() {
                       name="email"
                       type="email"
                       required
-                      placeholder="Enter your email"
+                      placeholder="Enter your Epitech email"
                       autoComplete="email"
                     />
                   </div>

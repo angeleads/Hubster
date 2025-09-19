@@ -64,9 +64,9 @@ export function EventCard({ event }: EventProps) {
   }
 
   return (
-    <Card className="overflow-hidden">
-      <CardContent className="p-0">
-        <div className="p-4">
+    <Card className="overflow-hidden flex flex-col">
+      <CardContent className="p-0 flex flex-col flex-grow">
+        <div className="p-4 flex-grow">
           <div className="flex justify-between items-start mb-2">
             <h3 className="font-medium text-lg">{event.title}</h3>
             <Badge className={getEventTypeColor(event.event_type)}>{getEventTypeLabel(event.event_type)}</Badge>

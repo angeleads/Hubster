@@ -83,7 +83,7 @@ export default function EditProjectPage() {
       }
 
       // Check if project can be edited (only draft and rejected projects)
-      if (!["draft", "rejected", "submitted"].includes(data.status)) {
+      if (!["draft", "rejected", "submitted", "completed"].includes(data.status)) {
         setError("This project cannot be edited in its current status");
         return;
       }
@@ -101,11 +101,11 @@ export default function EditProjectPage() {
       const formData: Partial<ProjectFormData> = {
         name: data.title || "",
         summary: data.description || "",
-        leaders: [{ name: "", tekx: "", position: "" }], // Default empty leader
+        leaders: [{ name: "", tekx: "", position: "" }],
         functionalPurpose: data.functional_requirements || [""],
-        material: data.material, // Not stored in simplified schema
+        material: data.material,
         programmingLanguages: data.technical_requirements || [""],
-        resources: data.resources, // Not stored in simplified schema
+        resources: data.resources,
         deliverables: formattedDeliverables,
         totalEstimatedDays: timelineDays,
         totalCredits: data.credits || Math.floor(timelineDays / 5),
@@ -129,14 +129,6 @@ export default function EditProjectPage() {
       setIsLoading(false);
     }
   };
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <LoadingSpinner />
-      </div>
-    );
-  }
 
   function mapProjectToFormData(project: any): Partial<ProjectFormData> {
     return {
@@ -175,8 +167,13 @@ export default function EditProjectPage() {
     };
   }
 
-  const formData = mapProjectToFormData(project);
-  console.log("Mapped form data:", formData);
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   if (error) {
     return (

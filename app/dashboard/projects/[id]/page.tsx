@@ -193,6 +193,7 @@ export default function ProjectDetailPage() {
     isOwner &&
     (project.status === "draft" ||
       project.status === "rejected" ||
+      project.status === "completed" ||
       project.status === "submitted");
   const formattedDeliverables = formatDeliverables(project.deliverables);
 

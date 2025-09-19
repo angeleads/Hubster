@@ -20,11 +20,11 @@ export function Step3Technical() {
   const { formData, updateFormData, goToNextStep, goToPreviousStep } =
     useProjectForm();
 
-  console.log("Step3Technical formData:", {
-    material: formData.material,
-    resources: formData.resources,
-    allFormData: formData,
-  });
+  // console.log("Step3Technical formData:", {
+  //   material: formData.material,
+  //   resources: formData.resources,
+  //   allFormData: formData,
+  // });
 
   const handleAddLanguage = () => {
     updateFormData({
@@ -64,10 +64,10 @@ export function Step3Technical() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Submitting Step3 with:", {
-      material: formData.material,
-      resources: formData.resources,
-    });
+    // console.log("Submitting Step3 with:", {
+    //   material: formData.material,
+    //   resources: formData.resources,
+    // });
     goToNextStep();
   };
 
@@ -86,7 +86,7 @@ export function Step3Technical() {
             <Textarea
               id="material"
               value={formData.material}
-              className="border-2 border-purple-200 focus:border-purple-400"
+              className="border-2 border-purple-200 focus:border-purple-400 min-h-[100px]"
               onChange={(e) => updateFormData({ material: e.target.value })}
               placeholder="Describe any hardware or special materials needed for your project"
               rows={3}
@@ -135,7 +135,7 @@ export function Step3Technical() {
                 <Input
                   value={resource}
                   className="border-2 border-purple-200 focus:border-purple-400"
-                  onChange={(e) => handleResourceChange(index, e.target.value)}
+                  onChange={(e) => handleResourceChange(index, e.target.value) }
                   placeholder="e.g., https://api.example.com"
                   required
                 />
