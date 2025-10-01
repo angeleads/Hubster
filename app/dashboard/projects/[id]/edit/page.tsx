@@ -7,6 +7,7 @@ import { useAuth } from "@/contexts/auth-context";
 import {
   ProjectFormProvider,
   ProjectFormData,
+  defaultFormData,
 } from "@/components/project/project-form/form-context";
 import { ProjectForm } from "@/components/project/project-form/project-form";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
@@ -109,12 +110,16 @@ export default function EditProjectPage() {
         deliverables: formattedDeliverables,
         totalEstimatedDays: timelineDays,
         totalCredits: data.credits || Math.floor(timelineDays / 5),
-        releases: [
-          { version: "1.0", features: [""] },
-          { version: "2.0", features: [""] },
-          { version: "3.0", features: [""] },
-          { version: "4.0", features: [""] },
-        ],
+        releases:
+          Array.isArray(data.releases) && data.releases.length > 0
+            ? data.releases.map((release: any) => ({
+                ...release,
+                features:
+                  Array.isArray(release.features) && release.features.length > 0
+                    ? release.features
+                    : [""],
+              }))
+            : defaultFormData.releases,
         screenshots: [],
         description: data.description || "",
         videoUrl: data.demo_url || "",

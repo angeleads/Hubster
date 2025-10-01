@@ -6,7 +6,7 @@ import { useToast } from "@/hooks/use-toast"
 import { supabase } from "@/lib/supabase" // Declare the supabase variable
 
 export function SessionMonitor() {
-  const { user, refreshSession } = useAuth()
+  const { user } = useAuth()
   const { toast } = useToast()
 
   useEffect(() => {
@@ -21,8 +21,7 @@ export function SessionMonitor() {
         } = await supabase.auth.getSession()
 
         if (error || !session) {
-          console.log("Session invalid, attempting refresh...")
-          await refreshSession()
+          // Handle session refresh or redirect here if needed
         }
       } catch (error) {
         console.error("Session check failed:", error)
@@ -37,7 +36,7 @@ export function SessionMonitor() {
     const interval = setInterval(checkSession, 5 * 60 * 1000) // 5 minutes
 
     return () => clearInterval(interval)
-  }, [user, refreshSession, toast])
+  }, [user, toast])
 
   return null
 }

@@ -78,7 +78,6 @@ export default function AdminProjectsPage() {
         throw error;
       }
 
-      //console.log("Fetched projects:", data);
       setProjects(data || []);
     } catch (error: any) {
       console.error("Error fetching projects:", error);

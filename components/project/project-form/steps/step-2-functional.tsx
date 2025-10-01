@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { useProjectForm } from "../form-context";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,15 @@ export function Step2Functional() {
   const { formData, updateFormData, goToNextStep, goToPreviousStep } =
     useProjectForm();
   const [showHint, setShowHint] = useState(false);
+
+  useEffect(() => {
+    if (
+      !Array.isArray(formData.functionalPurpose) ||
+      formData.functionalPurpose.length === 0
+    ) {
+      updateFormData({ functionalPurpose: [""] });
+    }
+  }, []);
 
   const handleAddFunctionalPurpose = () => {
     updateFormData({

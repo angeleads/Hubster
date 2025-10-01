@@ -178,11 +178,20 @@ export function ProjectFormProvider({
         project_type: "student_project",
         functional_requirements: formData.functionalPurpose.filter((req) => req.trim() !== ""),
         technical_requirements: formData.programmingLanguages.filter((req) => req.trim() !== ""),
+        material: formData.material || "",
+        resources: formData.resources.filter((res) => res.trim() !== ""),
         deliverables: formatDeliverablesForDB(formData.deliverables),
         timeline_estimate: `${formData.totalEstimatedDays} days`,
         credits,
         github_url: formData.projectFolderUrl || null,
         demo_url: formData.videoUrl || null,
+        releases: formData.releases.map(release => ({
+          ...release,
+          // Ensure features is an array of non-empty strings
+          features: Array.isArray(release.features) 
+            ? release.features.filter(feature => feature.trim() !== "") 
+            : [],
+        })),
         file_attachments: [],
         status: "draft",
         updated_at: new Date().toISOString(),
@@ -275,11 +284,20 @@ export function ProjectFormProvider({
         project_type: "student_project",
         functional_requirements: formData.functionalPurpose.filter((req) => req.trim() !== ""),
         technical_requirements: formData.programmingLanguages.filter((req) => req.trim() !== ""),
+        material: formData.material || "",
+        resources: formData.resources.filter((res) => res.trim() !== ""),
         deliverables: formatDeliverablesForDB(formData.deliverables),
         timeline_estimate: `${formData.totalEstimatedDays} days`,
         credits,
         github_url: formData.projectFolderUrl || null,
         demo_url: formData.videoUrl || null,
+        releases: formData.releases.map(release => ({
+          ...release,
+          // Ensure features is an array of non-empty strings
+          features: Array.isArray(release.features) 
+            ? release.features.filter(feature => feature.trim() !== "") 
+            : [],
+        })),
         file_attachments: [],
         status: "submitted",
         submitted_at: new Date().toISOString(),

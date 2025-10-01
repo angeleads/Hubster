@@ -26,7 +26,7 @@ import {
   CheckCircle,
   XCircle,
   Play,
-  RotateCcw,
+  Rocket,
   Target,
 } from "lucide-react";
 import Link from "next/link";
@@ -40,6 +40,9 @@ interface Project {
   project_type: string;
   functional_requirements: string[];
   technical_requirements: string[];
+  releases: { version: string; features: string[] }[];
+  material: string;
+  resources: string[];
   deliverables: any[]; // Array of arrays: [title, details, days]
   timeline_estimate: string;
   credits: number;
@@ -287,6 +290,13 @@ export default function ProjectDetailPage() {
             </div>
           )}
 
+          {project.material && (
+            <div>
+              <h3 className="font-semibold mb-2">Material</h3>
+              <p className="text-muted-foreground">{project.material}</p>
+            </div>
+          )}
+
           {formattedDeliverables.length > 0 && (
             <div>
               <h3 className="font-semibold mb-4 flex items-center">
@@ -356,6 +366,44 @@ export default function ProjectDetailPage() {
               </div>
             </div>
           )}
+
+          {project.releases && project.releases.length > 0 && (
+            <div>
+              <h3 className="font-semibold mb-4 flex items-center">
+                <Rocket className="h-5 w-5 mr-2 text-black" />
+                Project Releases
+              </h3>
+              <div className="space-y-4">
+                {project.releases.map((release: any, index: number) => (
+                  <Card key={index} className="border-l-4 border-l-purple-500">
+                    <CardHeader className="pb-2">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium text-purple-700">
+                          Version {release.version}
+                        </span>
+                        <Badge
+                          variant="outline"
+                          className="bg-purple-50 text-purple-700 border-purple-200"
+                        >
+                          Release {index + 1}
+                        </Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="pt-0">
+                      <ul className="list-disc list-inside space-y-1 ml-2">
+                        {release.features.map((feature: string, fIdx: number) => (
+                          <li key={fIdx} className="text-muted-foreground">
+                            {feature}
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          )}
+
 
           {(project.github_url || project.demo_url) && (
             <div>

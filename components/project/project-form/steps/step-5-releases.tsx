@@ -34,53 +34,27 @@ export function Step5Releases() {
   const [showHint, setShowHint] = useState(false);
   const router = useRouter();
 
-  // Ensure releases is always an array
   useEffect(() => {
-    if (
-      !formData.releases ||
-      !Array.isArray(formData.releases) ||
-      formData.releases.length === 0
-    ) {
-      // Only update if necessary to avoid infinite loops
-      const defaultReleases = [
-        { version: "1.0", features: [""] },
-        { version: "2.0", features: [""] },
-        { version: "3.0", features: [""] },
-        { version: "4.0", features: [""] },
-      ];
-
-      // Check if we need to update to avoid infinite loops
-      const needsUpdate =
-        !formData.releases ||
-        !Array.isArray(formData.releases) ||
-        formData.releases.length === 0;
-
-      if (needsUpdate) {
-        updateFormData({
-          releases: defaultReleases,
-        });
-      }
+    if (!Array.isArray(formData.releases) || formData.releases.length === 0) {
+      updateFormData({
+        releases: [
+          { version: "1.0", features: [""] },
+          { version: "2.0", features: [""] },
+          { version: "3.0", features: [""] },
+          { version: "4.0", features: [""] },
+        ],
+      });
     }
-  }, []); // Empty dependency array - only run once on mount
-
-  // Use a safe version of releases that's guaranteed to be an array
-  const releases = Array.isArray(formData.releases)
-    ? formData.releases
-    : [
-        { version: "1.0", features: [""] },
-        { version: "2.0", features: [""] },
-        { version: "3.0", features: [""] },
-        { version: "4.0", features: [""] },
-      ];
+  }, []); // Empty dependency array ensures this runs only once on mount
 
   const handleAddFeature = (releaseIndex: number) => {
-    const newReleases = [...releases];
+    const newReleases = [...formData.releases];
     newReleases[releaseIndex].features.push("");
     updateFormData({ releases: newReleases });
   };
 
   const handleRemoveFeature = (releaseIndex: number, featureIndex: number) => {
-    const newReleases = [...releases];
+    const newReleases = [...formData.releases];
     newReleases[releaseIndex].features.splice(featureIndex, 1);
     updateFormData({ releases: newReleases });
   };
@@ -90,7 +64,7 @@ export function Step5Releases() {
     featureIndex: number,
     value: string
   ) => {
-    const newReleases = [...releases];
+    const newReleases = [...formData.releases];
     newReleases[releaseIndex].features[featureIndex] = value;
     updateFormData({ releases: newReleases });
   };
@@ -115,9 +89,6 @@ export function Step5Releases() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // console.log("Submitting Step5 with:", {
-    //   releases: formData.releases,
-    // });
     try {
       await submitProject();
       toast({
@@ -179,7 +150,7 @@ export function Step5Releases() {
           )}
         </CardHeader>
         <CardContent className="space-y-6">
-          {releases.map((release, releaseIndex) => (
+          {formData.releases.map((release, releaseIndex) => (
             <div key={releaseIndex} className="space-y-4 p-4 border rounded-md">
               <div className="flex items-center justify-between">
                 <h3 className="font-medium">Release {release.version}</h3>
@@ -199,29 +170,29 @@ export function Step5Releases() {
                   release.features.map((feature, featureIndex) => (
                     <div key={featureIndex} className="flex items-center gap-2">
                       <Input
-                        value={feature}
+                        value={formData.releases[releaseIndex].features[featureIndex] || ""}
                         onChange={(e) =>
                           handleFeatureChange(
-                            releaseIndex,
-                            featureIndex,
-                            e.target.value
+                          releaseIndex,
+                          featureIndex,
+                          e.target.value
                           )
                         }
                         className="border-2 border-purple-200 focus:border-purple-400"
-                        placeholder="e.g., Task 1 done"
+                        placeholder="e.g., Task done"
                         required
                       />
                       {featureIndex > 0 && (
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          onClick={() =>
-                            handleRemoveFeature(releaseIndex, featureIndex)
-                          }
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() =>
+                        handleRemoveFeature(releaseIndex, featureIndex)
+                        }
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
                       )}
                     </div>
                   ))}
@@ -254,7 +225,7 @@ export function Step5Releases() {
             <Label htmlFor="description">Light Description (mandatory)</Label>
             <Textarea
               id="description"
-              value={formData.description}
+              value={formData.description || ""}
               onChange={(e) => updateFormData({ description: e.target.value })}
               placeholder="Provide a brief description of your project"
               className="border-2 border-purple-200 focus:border-purple-400"
@@ -266,7 +237,7 @@ export function Step5Releases() {
             <Label htmlFor="videoUrl">Video URL (optional)</Label>
             <Input
               id="videoUrl"
-              value={formData.videoUrl}
+              value={formData.videoUrl || ""}
               onChange={(e) => updateFormData({ videoUrl: e.target.value })}
               placeholder="e.g., https://youtube.com/watch?v=..."
               className="border-2 border-purple-200 focus:border-purple-400"
@@ -280,7 +251,7 @@ export function Step5Releases() {
             </Label>
             <Input
               id="projectFolderUrl"
-              value={formData.projectFolderUrl}
+              value={formData.projectFolderUrl || ""}
               onChange={(e) =>
                 updateFormData({ projectFolderUrl: e.target.value })
               }

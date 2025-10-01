@@ -1,6 +1,6 @@
 "use client";
 
-import type React from "react";
+import React, { useEffect } from "react";
 
 import { useProjectForm } from "../form-context";
 import { Button } from "@/components/ui/button";
@@ -20,54 +20,58 @@ export function Step3Technical() {
   const { formData, updateFormData, goToNextStep, goToPreviousStep } =
     useProjectForm();
 
-  // console.log("Step3Technical formData:", {
-  //   material: formData.material,
-  //   resources: formData.resources,
-  //   allFormData: formData,
-  // });
+  useEffect(() => {
+    if (!Array.isArray(formData.programmingLanguages)) {
+      updateFormData({ programmingLanguages: [""] });
+    }
+    if (!Array.isArray(formData.resources)) {
+      updateFormData({ resources: [""] });
+    }
+  }, []); // Empty dependency array ensures this runs only once on mount
+
+  const programmingLanguages = Array.isArray(formData.programmingLanguages)
+    ? formData.programmingLanguages
+    : [""];
+  const resources = Array.isArray(formData.resources) ? formData.resources : [""];
 
   const handleAddLanguage = () => {
     updateFormData({
-      programmingLanguages: [...formData.programmingLanguages, ""],
+      programmingLanguages: [...programmingLanguages, ""],
     });
   };
 
   const handleRemoveLanguage = (index: number) => {
-    const newLanguages = [...formData.programmingLanguages];
+    const newLanguages = [...programmingLanguages];
     newLanguages.splice(index, 1);
     updateFormData({ programmingLanguages: newLanguages });
   };
 
   const handleLanguageChange = (index: number, value: string) => {
-    const newLanguages = [...formData.programmingLanguages];
+    const newLanguages = [...programmingLanguages];
     newLanguages[index] = value;
     updateFormData({ programmingLanguages: newLanguages });
   };
 
   const handleAddResource = () => {
     updateFormData({
-      resources: [...formData.resources, ""],
+      resources: [...resources, ""],
     });
   };
 
   const handleRemoveResource = (index: number) => {
-    const newResources = [...formData.resources];
+    const newResources = [...resources];
     newResources.splice(index, 1);
     updateFormData({ resources: newResources });
   };
 
   const handleResourceChange = (index: number, value: string) => {
-    const newResources = [...formData.resources];
+    const newResources = [...resources];
     newResources[index] = value;
     updateFormData({ resources: newResources });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // console.log("Submitting Step3 with:", {
-    //   material: formData.material,
-    //   resources: formData.resources,
-    // });
     goToNextStep();
   };
 
@@ -85,7 +89,7 @@ export function Step3Technical() {
             <Label htmlFor="material">Material (if needed)</Label>
             <Textarea
               id="material"
-              value={formData.material}
+              value={formData.material || ""}
               className="border-2 border-purple-200 focus:border-purple-400 min-h-[100px]"
               onChange={(e) => updateFormData({ material: e.target.value })}
               placeholder="Describe any hardware or special materials needed for your project"
@@ -95,7 +99,7 @@ export function Step3Technical() {
 
           <div className="space-y-2">
             <Label>Programming Languages</Label>
-            {formData.programmingLanguages.map((language, index) => (
+            {programmingLanguages.map((language, index) => (
               <div key={index} className="flex items-center gap-2">
                 <Input
                   value={language}
@@ -130,14 +134,13 @@ export function Step3Technical() {
 
           <div className="space-y-2">
             <Label>Resources (API, course material, documentation links)</Label>
-            {formData.resources.map((resource, index) => (
+            {resources.map((resource, index) => (
               <div key={index} className="flex items-center gap-2">
                 <Input
                   value={resource}
                   className="border-2 border-purple-200 focus:border-purple-400"
                   onChange={(e) => handleResourceChange(index, e.target.value) }
                   placeholder="e.g., https://api.example.com"
-                  required
                 />
                 {index > 0 && (
                   <Button

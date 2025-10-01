@@ -42,7 +42,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     fetchingProfile.current = true
 
     try {
-      console.log(`Fetching profile for user: ${userId} retry: ${retryCount}`)
 
       const { data, error } = await supabase.from("profiles").select("*").eq("id", userId).maybeSingle()
 
@@ -64,10 +63,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       if (!data) {
-        console.log(`No profile found for user: ${userId}`)
 
         if (retryCount < 2) {
-          console.log("Attempting to create profile manually...")
           try {
             const { data: userData } = await supabase.auth.getUser()
             if (userData.user && mounted.current) {
@@ -91,7 +88,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 return
               }
 
-              console.log("Profile created manually:", newProfile)
               if (mounted.current) {
                 setProfile(newProfile)
               }
@@ -106,7 +102,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return
       }
 
-      console.log("Profile fetched successfully:", data)
       if (mounted.current) {
         setProfile(data)
       }
@@ -144,7 +139,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       })
 
       if (error) throw error
-      console.log("Sign up successful:", data)
     } catch (error) {
       console.error("Sign up error:", error)
       throw error
@@ -159,7 +153,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       })
 
       if (error) throw error
-      console.log("Sign in successful:", data)
     } catch (error) {
       console.error("Sign in error:", error)
       throw error
@@ -219,7 +212,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log("Auth state changed:", event, session?.user?.id)
 
       if (mounted.current) {
         setSession(session)
