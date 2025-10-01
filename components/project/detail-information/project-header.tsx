@@ -29,7 +29,7 @@ export function ProjectHeader({
           Back to Dashboard
         </Link>
         <h2 className="text-2xl font-bold text-black">{project.name}</h2>
-        <div className="flex items-center gap-2 mt-1">
+        <div className="flex items-center gap-2 mt-1"> 
           <StatusBadge status={project.status} />
           <span className="text-sm text-slate-400">
             Created on {new Date(project.created_at).toLocaleDateString()}

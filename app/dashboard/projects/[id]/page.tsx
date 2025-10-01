@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/auth-context";
 import { ProjectFeedback } from "@/components/project/detail-information/project-feeback";
+import { DeleteProjectDialog } from "@/components/project/detail-information/project-delete-dialog";
 import { ProjectLikeButton } from "@/components/project/detail-information/project-like-buttons";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
@@ -28,6 +29,7 @@ import {
   Play,
   Rocket,
   Target,
+  RotateCcw,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -220,6 +222,12 @@ export default function ProjectDetailPage() {
                 Edit Project
               </Link>
             </Button>
+          )}
+          {isOwner && (
+            <DeleteProjectDialog
+              projectId={projectId}
+              projectName={project.title}
+            />
           )}
           <ProjectLikeButton
             projectId={projectId}

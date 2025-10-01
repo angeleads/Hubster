@@ -80,7 +80,7 @@ export default function Navbar() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={handleSignOut}
-                  className="bg-red-50 text-red-700 hover:bg-red-300 hover:text-red-900"
+                  className="bg-red-100 text-red-700 hover:bg-red-300 hover:text-red-900"
                 >
                   <div className="flex items-center">
                     <LogOut className="mr-2 h-4 w-4" />
