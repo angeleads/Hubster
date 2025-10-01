@@ -205,7 +205,7 @@ export default function ProjectDetailPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <Button variant="ghost" asChild className="hover:underline">
+          <Button asChild className="hover:underline bg-purple-200 text-purple-700 border-purple-400 hover:bg-purple-200 hover:text-purple-800">
             <Link href="/dashboard">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Dashboard

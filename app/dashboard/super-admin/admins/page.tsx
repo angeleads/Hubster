@@ -187,7 +187,7 @@ export default function ManageAdminsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <Link href="/dashboard" className="text-sm text-slate-400 hover:text-white flex items-center mb-2">
+        <Link href="/dashboard" className="text-sm hover:underline bg-purple-200 text-purple-700 border-purple-400 hover:bg-purple-200 hover:text-purple-800lex items-center mb-2">
           <ArrowLeft className="h-4 w-4 mr-1" />
           Back to Dashboard
         </Link>

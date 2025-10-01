@@ -48,10 +48,10 @@ export function Step1Basics() {
           <div className="space-y-2">
             <Label htmlFor="summary">Project Summary</Label>
             <Textarea
-              id="summary"
-              value={formData.summary || ""}
+              id="description"
+              value={formData.description}
               className="border-2 border-purple-200 focus:border-purple-400"
-              onChange={(e) => updateFormData({ summary: e.target.value })}
+              onChange={(e) => updateFormData({ description: e.target.value })}
               placeholder="Provide a brief summary of your project"
               required
             />

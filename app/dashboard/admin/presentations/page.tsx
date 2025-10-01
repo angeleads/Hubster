@@ -233,7 +233,7 @@ export default function AdminPresentationsPage() {
       <div>
         <Link
           href="/dashboard"
-          className="text-sm text-gray-500 hover:text-gray-700 flex items-center mb-2"
+          className="text-sm  flex items-center mb-2"
         >
           <ArrowLeft className="h-4 w-4 mr-1" />
           Back to Dashboard
