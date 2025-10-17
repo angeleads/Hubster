@@ -1,41 +1,16 @@
-"use client";
+import { createClient } from '@/utils/server'
+import { redirect } from 'next/navigation'
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/contexts/auth-context";
-import { Loader2 } from "lucide-react";
+export default async function HomePage() {
+  const supabase = await createClient()
 
-export default function HomePage() {
-  const { user, loading } = useAuth();
-  const router = useRouter();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
-
-  useEffect(() => {
-    if (!loading) {
-      if (!user) {
-        router.push("/auth");
-      } else {
-        router.push("/dashboard");
-      }
-    }
-  }, [user, loading, router]);
-
-  if (loading) {
-  return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="text-center">
-        <Loader2 className="h-8 w-8 animate-spin mx-auto" />
-        <p className="mt-2">Loading...</p>
-        <button 
-          onClick={() => window.location.reload()} 
-          className="mt-4 text-purple-600 hover:underline"
-        >
-          Taking too long? Click to refresh
-        </button>
-      </div>
-    </div>
-  )
-}
-
-  return null;
+  if (!user) {
+    redirect('/auth')
+  } else {
+    redirect('/dashboard')
+  }
 }

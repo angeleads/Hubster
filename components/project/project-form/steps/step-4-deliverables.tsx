@@ -178,7 +178,7 @@ export function Step4Deliverables() {
                       e.target.value
                     )
                   }
-                  placeholder="e.g., User Authentication"
+                  placeholder="e.g., Functionality 1: User Authentication"
                   required
                 />
               </div>
@@ -192,7 +192,7 @@ export function Step4Deliverables() {
                   onChange={(e) =>
                     handleDeliverableChange(index, "details", e.target.value)
                   }
-                  placeholder="Describe the details of this functionality"
+                  placeholder="Describe the details of this functionality (make it as specific as possible)"
                   rows={2}
                   required
                 />

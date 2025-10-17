@@ -4,6 +4,8 @@ import { createContext, useContext, useState, type ReactNode } from "react"
 import { supabase } from "@/lib/supabase"
 import { useRouter } from "next/navigation"
 import { useToast } from "@/hooks/use-toast"
+import { useAuth } from "@/contexts/auth-context"
+import { createClient } from "@supabase/supabase-js"
 
 export type ProjectFormData = {
   name: string
@@ -86,6 +88,7 @@ export function ProjectFormProvider({
   const [isSaving, setIsSaving] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [projectIdState, setProjectIdState] = useState<string | null>(projectId || null)
+  const { session } = useAuth() 
 
   const router = useRouter()
   const { toast } = useToast()
@@ -270,6 +273,7 @@ export function ProjectFormProvider({
   const submitProjectAction = async () => {
     setIsSubmitting(true)
     try {
+      await supabase.auth.refreshSession()
       const {
         data: { user },
       } = await supabase.auth.getUser()
